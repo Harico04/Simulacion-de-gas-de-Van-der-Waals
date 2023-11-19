@@ -84,9 +84,9 @@ public class PanelVariables extends JPanel{
         // atmosferas x 10^1.
         variables[Constantes.PRESION].setMinimum(70);
         variables[Constantes.PRESION].setMaximum(1100);
-        variables[Constantes.PRESION].setValue(6000);
-        variables[Constantes.PRESION].setMajorTickSpacing(1000);
-        variables[Constantes.PRESION].setMinorTickSpacing(250);
+        variables[Constantes.PRESION].setValue(600);
+        variables[Constantes.PRESION].setMajorTickSpacing(100);
+        variables[Constantes.PRESION].setMinorTickSpacing(25);
         variables[Constantes.PRESION].setPaintTicks(true);
         variables[Constantes.PRESION].setPaintLabels(false);
         variables[Constantes.PRESION].addChangeListener(new ChangeListener() {
