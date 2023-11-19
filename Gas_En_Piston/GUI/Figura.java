@@ -3,7 +3,7 @@
  */
 package GUI;
 
-public class Figura
+public interface Figura
 {
     
 }
