@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
-public class Gas implements GUI.Figura
+import GUI.VentanaDibujo;
+
+public class Gas extends Thread implements GUI.Figura
 {
     private final double R=0.08206;
     private double constante_a;
@@ -20,9 +22,12 @@ public class Gas implements GUI.Figura
     private Point puntoInicio,puntoFinal;
     public final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
     private final int RADIO_PISTON=20;
+
+    private VentanaDibujo panel;
     /*******************************************************************************/
-    public Gas(double v, double p, double T,double a, double b,Point pi,Point pf)
+    public Gas(double v, double p, double T,double a, double b,Point pi,Point pf, VentanaDibujo panel)
     {
+        this.panel = panel;
         this.setVariables(p,v,T);
         puntoInicio=pi;
         puntoFinal=pf;
@@ -143,5 +148,11 @@ public class Gas implements GUI.Figura
         double altura=(1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON);
         grafico.setColor(this.cambiarColor());
         grafico.fillRect((int)puntoInicio.getX(), (int)(puntoInicio.getY()+altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)(puntoFinal.getY()-puntoInicio.getY()-altura));
+    }
+
+    public void run(){
+        while(true){
+            panel.repaint();
+        }
     }
 }

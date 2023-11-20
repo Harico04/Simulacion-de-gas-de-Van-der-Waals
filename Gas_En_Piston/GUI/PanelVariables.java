@@ -35,12 +35,12 @@ public class PanelVariables extends JPanel{
     EscuchadorTemperatura escTemperatura;
     EscuchadorVolumen escVolumen;
     // Constructor del panel de variables.
-    public PanelVariables(Gas g, Piston p){
+    public PanelVariables(VentanaDibujo ventanaDibujo){
 
         inicializar();
 
-        gas=g;
-        piston=p;
+        gas= ventanaDibujo.getGas();
+        piston= ventanaDibujo.getPiston();
 
         setLayout(new GridLayout(0, 1));
 
