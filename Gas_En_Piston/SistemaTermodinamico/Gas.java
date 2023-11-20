@@ -7,6 +7,7 @@ package SistemaTermodinamico;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 
 public class Gas implements GUI.Figura
 {
@@ -16,12 +17,15 @@ public class Gas implements GUI.Figura
     private double presion;
     private double volumen;
     private double temperatura;
-    final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
+    private Point puntoInicio,puntoFinal;
+    public final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
     private final int RADIO_PISTON=20;
     /*******************************************************************************/
-    public Gas(Color c,double v, double p, double T,double a, double b)
+    public Gas(double v, double p, double T,double a, double b,Point pi,Point pf)
     {
         this.setVariables(p,v,T);
+        puntoInicio=pi;
+        puntoFinal=pf;
         constante_a=a;
         constante_b=b;
     }
@@ -89,39 +93,44 @@ public class Gas implements GUI.Figura
      * Calcula como se modifica la variable que no se modifico o fijo, en base
      * al tipo de proceso termodinamico que se realiza.
      */
-    public void calcularVariables(int variableFijada,int variableModificada)
+    public void calcularVariables(String tipoProceso,int variableModificada)
     {
          switch(variableModificada)
          {
             case PRESION:
-                if(temperatura!=variableFijada)
+                if(tipoProceso=="Isometrico")
                 {
                     temperatura=((presion+constante_a/(volumen*volumen))*(volumen-constante_b))/R;
+                    System.out.println("Temperatura calculada: "+temperatura);
                 }
                 else
                 {
                     volumen=aproximarVolumen(presion, -(R*temperatura+presion*constante_b), constante_a, -constante_a*constante_b);
+                    System.out.println("volumen calculado: "+volumen);
                 }
                 break;
             case TEMPERATURA:
-                if(volumen!=variableFijada)
+                if(tipoProceso=="Isobarico")
                 {
-                    volumen=aproximarVolumen(presion, -(R*temperatura+presion*constante_b), constante_a, -constante_a*constante_b);;
+                    volumen=aproximarVolumen(presion, -(R*temperatura+presion*constante_b), constante_a, -constante_a*constante_b);
+                    System.out.println("volumen calculado: "+volumen);
                 }
                 else
                 {
                     presion=(R*temperatura)/(volumen-constante_b)-constante_a/(volumen*volumen);
+                    System.out.println("presion calculada: "+presion);
                 }
                 break;
             case VOLUMEN:
-                if(temperatura!=variableFijada)
+                if(tipoProceso=="Isotermico")
                 {
-                    temperatura=((presion+constante_a/(volumen*volumen))*(volumen-constante_b))/R;
+                    presion=(R*temperatura)/(volumen-constante_b)-constante_a/(volumen*volumen);
+                    System.out.println("presion calculada: "+presion);
                 }
                 else
                 {
-                    presion=(R*temperatura)/(volumen-constante_b)-constante_a/(volumen*volumen);
-
+                    temperatura=((presion+constante_a/(volumen*volumen))*(volumen-constante_b))/R;
+                    System.out.println("Temperatura calculada: "+temperatura);
                 }
                 break;
          }
@@ -131,8 +140,8 @@ public class Gas implements GUI.Figura
      */
     public void pintar(Graphics grafico)
     {
-        double altura=volumen/(Math.PI*RADIO_PISTON*RADIO_PISTON);
+        double altura=(1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON);
         grafico.setColor(this.cambiarColor());
-        grafico.fillRect(50, (int)altura, 100, 100);
+        grafico.fillRect((int)puntoInicio.getX(), (int)(puntoInicio.getY()+altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)(puntoFinal.getY()-puntoInicio.getY()-altura));
     }
 }
