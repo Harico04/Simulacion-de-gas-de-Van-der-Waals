@@ -4,7 +4,6 @@
  * sistema como con otras moleculas.
  */
 package SistemaTermodinamico;
-
 import GUI.Figura;
 
 import java.util.Vector;
