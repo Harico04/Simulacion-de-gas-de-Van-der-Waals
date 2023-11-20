@@ -48,11 +48,21 @@ public class Piston extends Thread implements GUI.Figura
         g1.setColor(COLOR_PISTON);
         g1.fillRect((int)c1.getX(), (int)(c1.getY()+altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
     }
-    public void getParedes(Rectangle piston, Rectangle pA, Rectangle pD, Rectangle pI){
-        this.piston = piston;
-        this.pA = pA;
-        this.pD = pD;
-        this.pI = pI;
+
+    public Rectangle getPiston() {
+        return piston;
+    }
+
+    public Rectangle getPA() {
+        return pA;
+    }
+
+    public Rectangle getPD() {
+        return pD;
+    }
+
+    public Rectangle getPI() {
+        return pI;
     }
 
     public void run(){
