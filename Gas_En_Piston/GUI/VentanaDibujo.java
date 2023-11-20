@@ -26,12 +26,14 @@ public class VentanaDibujo extends JPanel
     
     @Override
     public void paintComponent(Graphics grafico){
-        
+
+        super.paintComponent(grafico);
         Graphics2D g2 = (Graphics2D) grafico;
-        
-        super.paintComponent(g2);
+
+        // hace mas suave el dibujo de la molecula
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
+        // Limpiamos la pantalla para que la molecula se dibuje en un panel limpio.
         g2.setPaint(g2.getBackground());
         g2.fillRect(0, 0, this.getWidth(), this.getHeight());
                 
