@@ -12,24 +12,35 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import SistemaTermodinamico.Gas;
+import SistemaTermodinamico.Piston;
+
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class PanelVariables extends JPanel{
 
     // Declaracion de variables.
     private JLabel impresionVariables[];
     private JSlider variables[];
-    private String procesos[] = { "Isotérmico", "Isobárico", "Isométrico" };
+    private String procesos[] = { "Isotermico", "Isobarico", "Isometrico" };
     private JComboBox<String> listaDeProcesos;
-    private float temperatura;
-    private float presion;
-    private float volumen;
-    
-    
+    private double temperatura;
+    private double presion;
+    private double volumen;
+    private Gas gas;
+    private Piston piston;
+    EscuchadorPresion escPresion;
+    EscuchadorTemperatura escTemperatura;
+    EscuchadorVolumen escVolumen;
     // Constructor del panel de variables.
-    public PanelVariables(){
+    public PanelVariables(Gas g, Piston p){
 
         inicializar();
+
+        gas=g;
+        piston=p;
 
         setLayout(new GridLayout(0, 1));
 
@@ -49,7 +60,84 @@ public class PanelVariables extends JPanel{
         add(new JLabel("Fausto Misael Medina Lugo"));
         add(new JLabel("Alan David Torres Flores"));
     }
-
+    class EscuchadorPresion implements ChangeListener
+    {
+        public void stateChanged(ChangeEvent e)
+        {
+             presion = variables[Constantes.PRESION].getValue()/100.0f;
+                    impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
+                    gas.setVariables(presion, volumen, temperatura);
+                    gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.PRESION);
+                    if(listaDeProcesos.getSelectedItem().toString()=="Isometrico")
+                    {
+                        variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                        temperatura=gas.getTemperatura();
+                        variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                        impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                        variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                    } 
+                    else
+                    {
+                        variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                        volumen=gas.getVolumen();
+                        variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
+                        impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                        variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                    } 
+        }
+    }
+    class EscuchadorTemperatura implements ChangeListener
+    {
+        public void stateChanged(ChangeEvent e)
+        {
+             temperatura = variables[Constantes.TEMPERATURA].getValue()/100.0f;
+            impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
+            gas.setVariables(presion, volumen, temperatura);
+            gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.TEMPERATURA);
+            if(listaDeProcesos.getSelectedItem().toString()=="Isobarico")
+            { 
+                variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                volumen=gas.getVolumen();
+                variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
+                impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+            }
+            else
+            {
+                variables[Constantes.PRESION].removeChangeListener(escPresion);
+                presion=gas.getPresion();
+                variables[Constantes.PRESION].setValue((int)(presion*100.0));
+                impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                variables[Constantes.PRESION].addChangeListener(escPresion);
+            } 
+        }
+    }
+    class EscuchadorVolumen implements ChangeListener
+    {
+        public void stateChanged(ChangeEvent e)
+        {
+             volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
+            impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
+            gas.setVariables(presion, volumen, temperatura);
+            gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.VOLUMEN);
+            if(listaDeProcesos.getSelectedItem().toString()=="Isotermico")
+            {
+                variables[Constantes.PRESION].removeChangeListener(escPresion);
+                presion=gas.getPresion();
+                variables[Constantes.PRESION].setValue((int)(presion*100.0));
+                impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                variables[Constantes.PRESION].addChangeListener(escPresion);
+            } 
+            else
+            {
+                variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                temperatura=gas.getTemperatura();
+                variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+            } 
+        }
+    }
     // Se inicializan las variables.
     protected void inicializar(){
 
@@ -58,58 +146,84 @@ public class PanelVariables extends JPanel{
             impresionVariables[i] = new JLabel();
  
         listaDeProcesos = new JComboBox<>(procesos);
-
+        /*
+         * Se otorga un ItemListener a listaDeProcesos, para poder establecer el tipo de proceso con el que se esta tratando.
+         */
+        listaDeProcesos.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e){
+                if(e.getStateChange()==ItemEvent.SELECTED){
+                    String seleccionado= listaDeProcesos.getSelectedItem().toString();
+                    switch(seleccionado)
+                    {
+                        case "Isotermico":
+                            variables[Constantes.TEMPERATURA].setEnabled(false);
+                            variables[Constantes.PRESION].setEnabled(true);
+                            variables[Constantes.VOLUMEN].setEnabled(true);
+                            break;
+                        case "Isobarico":
+                            variables[Constantes.TEMPERATURA].setEnabled(true);
+                            variables[Constantes.PRESION].setEnabled(false);
+                            variables[Constantes.VOLUMEN].setEnabled(true);
+                            break;
+                        case "Isometrico":
+                            variables[Constantes.TEMPERATURA].setEnabled(true);
+                            variables[Constantes.PRESION].setEnabled(true);
+                            variables[Constantes.VOLUMEN].setEnabled(false);
+                            break;
+                    }
+                }
+            }
+        });
         variables = new JSlider[Constantes.CANTIDAD_VARIABLES];
 
         for(int i = 0; i < Constantes.CANTIDAD_VARIABLES; ++i)
             variables[i] = new JSlider();
 
+        //Inicializamos los escuchadores. Se mantiene un puntero a ellos para
+        //poder removerlos y quitarlos.
+        escPresion= new EscuchadorPresion();
+        escTemperatura=new EscuchadorTemperatura();
+        escVolumen=new EscuchadorVolumen();
+
         // Configuramos el deslizador de la temperatura en
         // base a la escala kelvin.
         variables[Constantes.TEMPERATURA].setMinimum(26000);
         variables[Constantes.TEMPERATURA].setMaximum(40000);
-        variables[Constantes.TEMPERATURA].setValue(273);
+        temperatura=273;
+        variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100.0));
         variables[Constantes.TEMPERATURA].setMajorTickSpacing(2000);
         variables[Constantes.TEMPERATURA].setMinorTickSpacing(500);
         variables[Constantes.TEMPERATURA].setPaintTicks(true);
         variables[Constantes.TEMPERATURA].setPaintLabels(false);
-        variables[Constantes.TEMPERATURA].addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    temperatura = variables[Constantes.TEMPERATURA].getValue()/100.f;
-                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
-                }
-            });
+        variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+        impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
+
 
         // Configuramos el deslizador de la presion en 
         // atmosferas x 10^1.
         variables[Constantes.PRESION].setMinimum(70);
         variables[Constantes.PRESION].setMaximum(1100);
-        variables[Constantes.PRESION].setValue(600);
+        presion=1;
+        variables[Constantes.PRESION].setValue((int)(presion*100.0));
         variables[Constantes.PRESION].setMajorTickSpacing(100);
         variables[Constantes.PRESION].setMinorTickSpacing(25);
         variables[Constantes.PRESION].setPaintTicks(true);
         variables[Constantes.PRESION].setPaintLabels(false);
-        variables[Constantes.PRESION].addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    presion = variables[Constantes.PRESION].getValue()/100.f;
-                    impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
-                }
-            });
+        variables[Constantes.PRESION].addChangeListener(escPresion);
+        impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
 
         // Configuramos el deslizador del volumen en litros.
-        variables[Constantes.VOLUMEN].setMinimum(3);
+        variables[Constantes.VOLUMEN].setMinimum(300);
         variables[Constantes.VOLUMEN].setMaximum(5000);
-        variables[Constantes.VOLUMEN].setValue(1000);
+        volumen=35;
+        variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
         variables[Constantes.VOLUMEN].setMajorTickSpacing(400);
         variables[Constantes.VOLUMEN].setMinorTickSpacing(100);
         variables[Constantes.VOLUMEN].setPaintTicks(true);
         variables[Constantes.VOLUMEN].setPaintLabels(false);
-        variables[Constantes.VOLUMEN].addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    volumen = variables[Constantes.VOLUMEN].getValue()/100.f;
-                    impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
-                }
-            });
+        variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+        impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
+
     }
 
     // vemos que proceso fue seleccionado, retornamos un valor
