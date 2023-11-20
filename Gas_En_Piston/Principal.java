@@ -14,14 +14,13 @@ import GUI.VentanaDibujo;
 public class Principal
 {
     public static void main(String[] args) {
-
         JFrame ven = new JFrame();
         ven.setLayout(new BorderLayout());
         ven.add(new PanelVariables(), BorderLayout.EAST);
         ven.add(new VentanaDibujo(), BorderLayout.CENTER);
         ven.setSize(new Dimension(1000, 1000));
         ven.setLocationRelativeTo(null);
-        ven.setVisible(true);
         ven.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ven.setVisible(true);  
     }
 }
