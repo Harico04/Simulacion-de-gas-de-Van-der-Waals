@@ -65,6 +65,7 @@ public class Molecula extends Thread implements Figura {
     public void run(){
         while(true){
             actualizarMovimiento();
+            hitbox.setBounds(posicion.x, posicion.y, ancho, alto);
             panel.repaint();
             try{
                 sleep(16); // simulamos 60 fps: 1000 milisegundos entre 60.

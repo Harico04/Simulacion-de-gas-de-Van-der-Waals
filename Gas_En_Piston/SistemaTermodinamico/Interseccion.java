@@ -13,7 +13,7 @@ public class Interseccion extends Thread{
     private Molecula moleculas[];
     private Rectangle paredes[];
 
-    Interseccion(Molecula moleculas[], Rectangle paredes[]){
+    public Interseccion(Molecula moleculas[], Rectangle paredes[]){
         
         this.moleculas = moleculas;
         this.paredes = paredes;
