@@ -8,7 +8,7 @@ package SistemaTermodinamico;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Gas extends GUI.Figura
+public class Gas implements GUI.Figura
 {
     private final double R=0.08206;
     private double constante_a;
@@ -19,10 +19,8 @@ public class Gas extends GUI.Figura
     final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
     private final int RADIO_PISTON=20;
     /*******************************************************************************/
-    public Gas(Color c, int gr, double v, double p, double T,double a, double b)
+    public Gas(Color c,double v, double p, double T,double a, double b)
     {
-        this.color=c;
-        this.grosor=gr;
         this.setVariables(p,v,T);
         constante_a=a;
         constante_b=b;
@@ -131,7 +129,6 @@ public class Gas extends GUI.Figura
     /*
      * Pinta el gas en el DibujoPanel
      */
-    @Override
     public void pintar(Graphics grafico)
     {
         double altura=volumen/(Math.PI*RADIO_PISTON*RADIO_PISTON);
