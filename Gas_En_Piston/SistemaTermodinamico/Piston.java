@@ -15,7 +15,6 @@ public class Piston implements GUI.Figura
 {
   private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125);
   private double volumen,altura_piston;
-  private double volumen;
   private int grosor;
   Point c1,c2,p1,p2;
   
