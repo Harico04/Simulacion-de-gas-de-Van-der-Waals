@@ -27,7 +27,7 @@ public class Molecula extends Thread implements Figura {
 
     // Representamos a la velocidad de la molecula como
     // un vector el cual tiene componentes i y j.
-    private double velocidad[] = {1, 1};
+    private int velocidad[] = {1, 1};
 
     // Representamos la hitbox de la molecula con un cuadrado.
     private Rectangle hitbox;
@@ -65,7 +65,7 @@ public class Molecula extends Thread implements Figura {
     public void run(){
         while(true){
             actualizarMovimiento();
-            //panel.repaint();
+            panel.repaint();
             try{
                 sleep(16); // simulamos 60 fps: 1000 milisegundos entre 60.
             }catch(InterruptedException ie){
@@ -78,11 +78,12 @@ public class Molecula extends Thread implements Figura {
     // entorno de la molecula, puede ser afectado por una colisión
     // con una pared o con otra molecula.
     public void actualizarMovimiento(){
-        posicion.translate((int)velocidad[0] * 1, 0);
-        if(posicion.x == 400)
-            velocidad[0] = -1;
-        if(posicion.x == 30)
-            velocidad[0] = 1;
+        posicion.translate(velocidad[0], velocidad[1]);
+    }
+
+    public void modificarDireccion(){
+        velocidad[0] *= (-1);
+        velocidad[1] *= (-1);
     }
 
     // Predicado que indica si hay una interseccion entre un
@@ -91,6 +92,10 @@ public class Molecula extends Thread implements Figura {
         if(this.hitbox.intersects(objeto))
             return true;
         return false ;
+    }
+
+    public Rectangle getHitbox(){
+        return this.hitbox;
     }
 }
 
