@@ -3,9 +3,12 @@
  */
 package GUI;
 
+import java.awt.Graphics;
+
 import javax.swing.JPanel;
 
 public class VentanaDibujo extends JPanel
 {
-    
+
+
 }
