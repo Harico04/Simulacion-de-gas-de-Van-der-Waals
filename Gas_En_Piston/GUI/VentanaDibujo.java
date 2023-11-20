@@ -24,8 +24,7 @@ public class VentanaDibujo extends JPanel
     private Piston piston;
     private Molecula moleculas[];
     private Interseccion colisiones;
-    private Rectangle pistonPared, pA, pD, pI;
-    private Rectangle paredes[] = {pistonPared, pA, pD, pI};
+    private Rectangle paredes[] = new Rectangle[4];
     
     public VentanaDibujo()
     {
@@ -34,10 +33,10 @@ public class VentanaDibujo extends JPanel
         moleculas = new Molecula[1];
         moleculas[0] = new Molecula(new Point(10, 10), 30, 30, this);
 
-        pistonPared = piston.getPiston();
-        pA = piston.getPA();
-        pD = piston.getPD();
-        pI = piston.getPI();
+        paredes[0] = piston.getPiston();
+        paredes[1] = piston.getPA();
+        paredes[2] = piston.getPD();
+        paredes[3] = piston.getPI();
         this.colisiones = new Interseccion(moleculas, paredes);
         colisiones.start();
         moleculas[0].start();
