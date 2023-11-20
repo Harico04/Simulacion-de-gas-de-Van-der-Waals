@@ -11,55 +11,31 @@ import java.awt.Point;
 
 import javax.swing.JPanel;
 import java.awt.BasicStroke;
+import java.awt.Rectangle;
 public class Piston implements GUI.Figura
 
 {
-
-  //private final double VOLUMEN_MAXIMO,TEMPERATURA_MAXIMA,PRESION_MAXIMA;
-private final int GROSOR = 20;
-  private final Color COLOR_CONTENEDOR = Color, COLOR_PISTON = new Color(rgb);
-  private double volumen, temperatura, presion;
-public Piston(Point p1, Point p2, ){
-
+  private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125);
+  private double volumen;
+  Point c1,c2,p1,p2;
+public Piston(Point c1, Point c2,double volumen ){ 
+    this.c1 = c1;
+    this.c2 = c2;
+    double altura_piston = this.volumen/(Math.PI)*(200*200);
+    Rectangle piston = new Rectangle ((int)c1.getX(), (int) altura_piston, grosor, (int) (altura_piston-20));
+    Rectangle pI = new Rectangle ((int) c1.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
+    Rectangle pD = new Rectangle ((int) c2.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
+    Rectangle pA = new Rectangle((int) c1.getX(), (int)c2.getY(),(int)(c2.getX()-c1.getX()) , 1)
   }
-  // Getter para volumen
-    public double getVolumen() {
-        return volumen;
-    }
 
-    // Setter para volumen
-    public void setVolumen(double volumen) {
-        this.volumen = volumen;
-    }
-
-    // Getter para temperatura
-    public double getTemperatura() {
-        return temperatura;
-    }
-
-    // Setter para temperatura
-    public void setTemperatura(double temperatura) {
-        this.temperatura = temperatura;
-    }
-
-    // Getter para presion
-    public double getPresion() {
-        return presion;
-    }
-
-    // Setter para presion
-    public void setPresion(double presion) {
-        this.presion = presion;
-    }
-
-public void pintar(double volumen,Graphics g){
+public void pintar(Graphics g){
+  double altura_piston = this.volumen/(Math.PI)*(200*200);
     Graphics2D g1 = (Graphics2D) g;
-    g1.setColor(Color.GRAY);
-    g1.setStroke();
- 
- 
-  altura_piston = this.volumen/(Math.PI)*(200*200);
-         
+    int grosor = (int)(c2.getX()-c1.getX());
+    g1.setColor(COLOR_CONTENEDOR);
+    g1.drawRect((int) c1.getX(), (int)c1.getY(),grosor,(int)(c2.getY()-c1.getY()));
+    g1.setColor(COLOR_PISTON);
+    g1.drawRect((int)c1.getX(), (int) altura_piston, grosor, (int) (altura_piston-20)); 
 }
 
 }

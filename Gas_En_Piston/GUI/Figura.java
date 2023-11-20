@@ -5,5 +5,5 @@ package GUI;
 
 public interface Figura
 {
-    
+public void pintar(Graphics g);    
 }
