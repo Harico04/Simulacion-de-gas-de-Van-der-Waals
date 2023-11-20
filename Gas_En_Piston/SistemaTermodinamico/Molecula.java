@@ -5,7 +5,12 @@
  */
 package SistemaTermodinamico;
 
-public class Molecula extends GUI.Figura
+import java.awt.Graphics;
+
+public class Molecula implements GUI.Figura
 {
-    
+    public void pintar(Graphics grafico)
+    {
+        
+    }
 }
