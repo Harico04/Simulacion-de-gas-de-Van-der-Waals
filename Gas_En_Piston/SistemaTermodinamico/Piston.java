@@ -14,17 +14,23 @@ public class Piston implements GUI.Figura
 
 {
   private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125);
+  private double volumen,altura_piston;
   private double volumen;
   private int grosor;
   Point c1,c2,p1,p2;
-public Piston(Point c1, Point c2,double volumen ){ 
+  
+  public Piston(Point c1, Point c2,double volumen ){ 
     this.c1 = c1;
     this.c2 = c2;
-    double altura_piston = this.volumen/(Math.PI)*(200*200);
-    Rectangle piston = new Rectangle ((int)c1.getX(), (int) altura_piston, grosor, (int) (altura_piston-20));
+    altura_piston = this.volumen/(Math.PI)*(200*200);
+    Rectangle piston = new Rectangle ((int)c1.getX(), (int) altura_piston, (int)(c2.getX()-c1.getX()), (int) (altura_piston-20));
     Rectangle pI = new Rectangle ((int) c1.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
     Rectangle pD = new Rectangle ((int) c2.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
     Rectangle pA = new Rectangle((int) c1.getX(), (int)c2.getY(),(int)(c2.getX()-c1.getX()) , 1);
+  }
+  public void setVolumen(double volumen){
+    this.volumen = volumen;
+    altura_piston = this.volumen/(Math.PI)*(200*200);
   }
 
 public void pintar(Graphics g){
