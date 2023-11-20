@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 public class Piston implements GUI.Figura
 
 {
-  private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125);
+  private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125), COLOR_TUBO = new Color(173,169,168);
   private final int GROSOR_PISTON=40;
   private double volumen,altura_piston;
   private int grosor;
@@ -42,6 +42,8 @@ public void pintar(Graphics g){
     g1.drawRect((int) c1.getX(), (int)c1.getY(),grosor,(int)(c2.getY()-c1.getY()));
     g1.setColor(COLOR_PISTON);
     g1.fillRect((int)c1.getX(), (int)(c1.getY()+altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
+    g1.setColor(COLOR_TUBO);
+    g1.drawRect((int)((c1.getX()+c2.getX())/2 - 15),(int) (c1.getY()), 30, (int)((c1.getY() - altura_piston - GROSOR_PISTON)/2));
 }
 public void getParedes(Rectangle piston, Rectangle pA, Rectangle pD, Rectangle pI){
    this.piston = piston;
