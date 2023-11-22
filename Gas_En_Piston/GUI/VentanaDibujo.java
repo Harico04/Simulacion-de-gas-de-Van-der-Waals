@@ -57,8 +57,8 @@ public class VentanaDibujo extends JPanel
         g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         // Dibuja la molecula.
-        piston.pintar(grafico);
-        gas.pintar(grafico);
+        piston.pintar(g2);
+        gas.pintar(g2);
         moleculas[0].pintar(g2);
     }
 

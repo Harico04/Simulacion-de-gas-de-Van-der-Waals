@@ -82,6 +82,7 @@ public class PanelVariables extends JPanel{
                         volumen=gas.getVolumen();
                         variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
                         impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                        piston.setVolumen(volumen);
                         variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
                     } 
         }
@@ -100,6 +101,7 @@ public class PanelVariables extends JPanel{
                 volumen=gas.getVolumen();
                 variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
                 impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                piston.setVolumen(volumen);
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
             }
             else
@@ -119,6 +121,7 @@ public class PanelVariables extends JPanel{
              volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
             gas.setVariables(presion, volumen, temperatura);
+            piston.setVolumen(volumen);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.VOLUMEN);
             if(listaDeProcesos.getSelectedItem().toString()=="Isotermico")
             {
