@@ -21,7 +21,9 @@ public class Gas extends Thread implements GUI.Figura
     private double temperatura;
     private Point puntoInicio,puntoFinal;
     public final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
+    private double alturaMaxima=50;
     private final int RADIO_PISTON=20;
+    private int escalaPixeles;
 
     private VentanaDibujo panel;
     /*******************************************************************************/
@@ -33,6 +35,7 @@ public class Gas extends Thread implements GUI.Figura
         puntoFinal=pf;
         constante_a=a;
         constante_b=b;
+        escalaPixeles=(int)((puntoFinal.getY()-puntoInicio.getY())/alturaMaxima);
     }
     /*
      * aproximarVolumen() utiliza el metodo de Newton-Raphson para obtener
@@ -141,13 +144,13 @@ public class Gas extends Thread implements GUI.Figura
          }
     }
     /*
-     * Pinta el gas en el DibujoPanel
+     * Pinta el gas en VentanaDibujo
      */
     public void pintar(Graphics grafico)
     {
-        double altura=(1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON);
+        double altura=escalaPixeles*((1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON));
         grafico.setColor(this.cambiarColor());
-        grafico.fillRect((int)puntoInicio.getX(), (int)(puntoInicio.getY()+altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)(puntoFinal.getY()-puntoInicio.getY()-altura));
+        grafico.fillRect((int)puntoInicio.getX(), (int)(puntoFinal.getY()-altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)altura);
     }
 
     public void run(){
