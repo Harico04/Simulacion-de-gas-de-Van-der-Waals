@@ -5,12 +5,15 @@
  */
 
 package SistemaTermodinamico;
+
+import GUI.VentanaDibujo;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-public class Piston implements GUI.Figura
+public class Piston extends Thread implements GUI.Figura
 
 {
   private final Color COLOR_CONTENEDOR = new Color(77, 71, 70), COLOR_PISTON = new Color(130,126,125), COLOR_TUBO = new Color(173,169,168);
@@ -43,7 +46,7 @@ public void pintar(Graphics g){
     g1.setColor(COLOR_CONTENEDOR);
     g1.drawRect((int) c1.getX(), (int)c1.getY(),grosor,(int)(c2.getY()-c1.getY()));
     g1.setColor(COLOR_PISTON);
-    g1.fillRect((int)c1.getX(), (int)(c1.getY()+altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
+    g1.fillRect((int)c1.getX(), (int)(c1.getY()-altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
     g1.setColor(COLOR_TUBO);
     g1.drawRect((int)((c1.getX()+c2.getX())/2 - 15),(int) (c1.getY()), 30, (int)((altura_piston-GROSOR_PISTON-c1.getY())/2));
 }
