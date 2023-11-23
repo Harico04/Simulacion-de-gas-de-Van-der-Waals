@@ -6,7 +6,9 @@
 package SistemaTermodinamico;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 
 import GUI.VentanaDibujo;
@@ -18,16 +20,18 @@ public class Gas extends Thread implements GUI.Figura
     private double constante_b;
     private double presion;
     private double volumen;
+    private double V_MAX;
     private double temperatura;
     private Point puntoInicio,puntoFinal;
     public final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
     private double alturaMaxima=50;
     private final int RADIO_PISTON=20;
+    private double altura;
     private int escalaPixeles;
 
     private VentanaDibujo panel;
     /*******************************************************************************/
-    public Gas(double v, double p, double T,double a, double b,Point pi,Point pf, VentanaDibujo panel)
+    public Gas(double v, double p, double T,double a, double b,Point pi,Point pf, VentanaDibujo panel,double VMX)
     {
         this.panel = panel;
         this.setVariables(p,v,T);
@@ -36,36 +40,49 @@ public class Gas extends Thread implements GUI.Figura
         constante_a=a;
         constante_b=b;
         escalaPixeles=(int)((puntoFinal.getY()-puntoInicio.getY())/alturaMaxima);
+        V_MAX=VMX;
     }
     /*
      * aproximarVolumen() utiliza el metodo de Newton-Raphson para obtener
      *  un valor aproximado del volumen.
      */
-    private static double aproximarVolumen(double a,double b,double c, double d)
+    private double aproximarVolumen()
     {
-        double valor=25.0;
+        double valor=V_MAX/2.0;
         for(int i=0;i<5;i++)
         {
-            valor=valor-(a*Math.pow(valor, 3)+b*Math.pow(valor, 2)+c*valor+d)/
-            (3*a*Math.pow(valor, 2)+2*b*valor+c);
+            valor=valor-(presion*Math.pow(valor, 3)-(constante_b*presion+R*temperatura)*Math.pow(valor, 2)+constante_a*valor-constante_a*constante_b)/
+            (3*presion*Math.pow(valor, 2)+2*-(constante_b*presion+R*temperatura)*valor+constante_a);
         }
         return valor;
     }
     /*
-     * cambiarColor() crea un nuevo color en base a la temeperatura, para que al pintar el gas
+     * cambiarColor() crea un nuevo color en base a la temperatura, para que al pintar el gas
      * se tenga una mejor representación de la misma.
      */
-    public Color cambiarColor()
+    public GradientPaint cambiarColor()
     {
-        if(temperatura<281)
+        if(temperatura<=260)
         {
-            return new Color(0,255,(int)(255-12.75*(temperatura%260)),150);
+            return new GradientPaint((float)puntoInicio.getX(),(float)(puntoFinal.getY()-altura),new Color(0,0,0,0),
+            (float)puntoInicio.getX(),(float)puntoFinal.getY(),new Color(0,255,255,150));
         }
-        if(temperatura<341)
+        if(temperatura<=280)
         {
-            return new Color((int)(4.25*(temperatura%280)),255,0,150);
+            return new GradientPaint((float)puntoInicio.getX(),(float)(puntoFinal.getY()-altura),new Color(0,0,0,0),
+            (float)puntoInicio.getX(),(float)puntoFinal.getY(),new Color(0,255,255-(int)(7.75*(temperatura-260)),150));
         }
-        return new Color(255,(int)(255-4.25*(temperatura%340)),0,150);
+        if(temperatura<=305)
+        {
+        return new GradientPaint((float)puntoInicio.getX(),(float)(puntoFinal.getY()-altura),new Color(0,0,0,0),
+        (float)puntoInicio.getX(),(float)puntoFinal.getY(),new Color((int)(100+6.2*(temperatura-280)),255,0,150)); 
+        }
+        if(temperatura<=373)
+        {
+        return new GradientPaint((float)puntoInicio.getX(),(float)(puntoFinal.getY()-altura),new Color(0,0,0,0),
+        (float)puntoInicio.getX(),(float)puntoFinal.getY(),new Color(255,255-(int)(3.75*(temperatura-305)),0,150)); 
+        }
+        return new GradientPaint((float)puntoInicio.getX(),(float)(puntoFinal.getY()-altura),new Color(0,0,0,0),(float)puntoInicio.getX(),(float)puntoFinal.getY(),new Color(255,0,0,150));
     }
     /*
      * Obtiene los valores de cada una de las variables termodinamicas.
@@ -113,14 +130,14 @@ public class Gas extends Thread implements GUI.Figura
                 }
                 else
                 {
-                    volumen=aproximarVolumen(presion, -(R*temperatura+presion*constante_b), constante_a, -constante_a*constante_b);
+                    volumen=aproximarVolumen();
                     System.out.println("volumen calculado: "+volumen);
                 }
                 break;
             case TEMPERATURA:
                 if(tipoProceso=="Isobarico")
                 {
-                    volumen=aproximarVolumen(presion, -(R*temperatura+presion*constante_b), constante_a, -constante_a*constante_b);
+                    volumen=aproximarVolumen();
                     System.out.println("volumen calculado: "+volumen);
                 }
                 else
@@ -146,10 +163,11 @@ public class Gas extends Thread implements GUI.Figura
     /*
      * Pinta el gas en VentanaDibujo
      */
-    public void pintar(Graphics grafico)
+    public void pintar(Graphics g)
     {
-        double altura=escalaPixeles*((1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON));
-        grafico.setColor(this.cambiarColor());
+        Graphics2D grafico=(Graphics2D) g;
+        altura=escalaPixeles*((1000*volumen)/(Math.PI*RADIO_PISTON*RADIO_PISTON));
+        grafico.setPaint(this.cambiarColor());
         grafico.fillRect((int)puntoInicio.getX(), (int)(puntoFinal.getY()-altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)altura);
     }
 
