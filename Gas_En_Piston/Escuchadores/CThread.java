@@ -4,7 +4,7 @@ public class CThread {
   public CThread(Thread[] hilos){
     this.hilos = hilos; 
   }
-  public void threadStart(){
+  public void startAll(){
     for (Thread thread : hilos) {
      thread.start(); 
     }
