@@ -2,10 +2,10 @@ package Escuchadores;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import Escuchadores.CThread;
 public class EscuchadorVentana extends WindowAdapter
 {
   Thread[] hilos;
+  boolean iconified = false;
   public EscuchadorVentana(Thread[] hilos){
     this.hilos = hilos;
   }
@@ -46,7 +46,7 @@ public void unfreezeAll() {
 
     @Override
     public void windowClosing(WindowEvent e) {
-    
+      this.stopAll();    
   }
 
     @Override
@@ -56,24 +56,26 @@ public void unfreezeAll() {
 
     @Override
     public void windowIconified(WindowEvent e) {
-      freezeAll();
+      this.iconified = true;
       
   }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-        System.out.println("Window Deiconified (Restored)");
-    }
+      this.iconified = false;
+  }
 
     @Override
     public void windowActivated(WindowEvent e) {
-        System.out.println("Window Activated");
-    }
+      this.iconified = false;
+      unfreezeAll();
+  }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-        System.out.println("Window Deactivated");
-    }
+      this.iconified = true;
+      this.freezeAll();
+  }
 }
 
 
