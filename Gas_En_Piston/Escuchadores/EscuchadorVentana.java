@@ -82,6 +82,7 @@ public void unfreezeAll() throws InterruptedException {
       }    
       catch(InterruptedException ie){
         System.out.println("El hilo fue interrumpido durante la espera"+ie.toString());
+      stopAll();
      }
 
   }
@@ -94,6 +95,7 @@ public void unfreezeAll() throws InterruptedException {
       }
       catch(InterruptedException ie){
             System.out.println("El hilo fue interrumpido"+ie.toString());
+            stopAll();
        }
      
   }
