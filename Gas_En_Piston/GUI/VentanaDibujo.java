@@ -16,31 +16,25 @@ import javax.swing.JPanel;
 
 import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
-import SistemaTermodinamico.Interseccion;
 
 public class VentanaDibujo extends JPanel
 {
     private Gas gas;
     private Piston piston;
     private Molecula moleculas[];
-    private Interseccion colisiones;
-    private Rectangle paredes[] = new Rectangle[4];
+    private double paredes[];
 
     public VentanaDibujo()
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
         this.piston= new Piston(new Point(50,100), new Point(700,750), 35.0, this,20);
         moleculas = new Molecula[1];
-        moleculas[0] = new Molecula(new Point(10, 10), 30, 30, this);
+        //moleculas[0] = new Molecula(new Point(150, 150), 10, 100, gas.,this);
 
-        //paredes[0] = piston.getPiston();
-        //paredes[1] = piston.getPA();
-        //paredes[2] = piston.getPD();
-        //paredes[3] = piston.getPI();
-        this.colisiones = new Interseccion(moleculas, paredes);
+        
        
         //colisiones.start();
-        moleculas[0].start();
+        //moleculas[0].start();
         gas.start();
         piston.start();
         setPreferredSize(new Dimension(700, 700));
@@ -61,7 +55,7 @@ public class VentanaDibujo extends JPanel
         // Dibuja la molecula.
         piston.pintar(g2);
         gas.pintar(g2);
-        moleculas[0].pintar(g2);
+        //moleculas[0].pintar(g2);
     }
 
     public Gas getGas(){
