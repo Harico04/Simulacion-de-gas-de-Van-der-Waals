@@ -60,13 +60,13 @@ public void pintar(Graphics g){
 
 
 }
-public Rectangle[] getParedes(){
-    Rectangle[] paredes = new Rectangle[4];
-    paredes[0] = this.piston;
-    paredes[1] = this.pD;
-    paredes[2] = this.pA;
-    paredes[3] = this.pI;
-    return paredes;
+  public double[] getParedes(){
+    double[] coordenadas = new double[4];
+    coordenadas[0] = this.c1.getY();
+    coordenadas[1] = this.c2.getX();
+    coordenadas[2] = this.c2.getY();
+    coordenadas[3] = this.c1.getX();
+    return coordenadas;
   }
 }
 
