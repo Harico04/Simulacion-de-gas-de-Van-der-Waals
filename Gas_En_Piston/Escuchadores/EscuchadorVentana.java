@@ -9,6 +9,13 @@ public class EscuchadorVentana extends WindowAdapter
   public EscuchadorVentana(Thread[] hilos){
     this.hilos = hilos;
   }
+  public void restoreThreadState(Thread[] threads){
+      for (Thread thread : threads) {
+       if(thread.isInterrupted()){
+        thread.notifyAll();
+      } 
+      }
+  }
   public void stopAll(){
     for (Thread thread : hilos) {
      if(thread != null){
@@ -25,13 +32,15 @@ public class EscuchadorVentana extends WindowAdapter
 public void freezeAll() throws InterruptedException{
     for (Thread thread : hilos) {
         if (thread != null) {
+          
             synchronized (thread) {
                     thread.wait();
-        }
-    }
+            }
+          }
+                  }
   }
-}
-public void unfreezeAll() {
+
+public void unfreezeAll() throws InterruptedException {
     for (Thread thread : hilos) {
         if (thread != null) {
             synchronized (thread) {
@@ -68,19 +77,25 @@ public void unfreezeAll() {
     @Override
     public void windowActivated(WindowEvent e) {
       this.iconified = false;
-      unfreezeAll();
+      try{
+        this.unfreezeAll();
+      }    
+      catch(InterruptedException ie){
+        System.out.println("El hilo fue interrumpido durante la espera"+ie.toString());
+     }
+
   }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
       this.iconified = true;
       try{
-      this.freezeAll();
-      }catch(InterruptedException ie)
-      {
-
+            this.freezeAll();
       }
+      catch(InterruptedException ie){
+            System.out.println("El hilo fue interrumpido"+ie.toString());
+       }
+     
   }
 }
-
 
