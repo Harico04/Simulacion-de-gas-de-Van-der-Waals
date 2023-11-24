@@ -11,9 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
 
 import javax.swing.JPanel;
 
@@ -28,8 +25,7 @@ public class VentanaDibujo extends JPanel
     private Molecula moleculas[];
     private Interseccion colisiones;
     private Rectangle paredes[] = new Rectangle[4];
-    private final int fps=60;
-    private Timer timer;
+
     public VentanaDibujo()
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
