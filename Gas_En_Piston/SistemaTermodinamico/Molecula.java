@@ -45,13 +45,14 @@ public class Molecula extends Thread implements Figura {
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
-    public Molecula(Point posicion, int alto, int ancho, int temperatura, VentanaDibujo panel) {
+    public Molecula(Point posicion, int radio, int temperatura, double[] paredes,VentanaDibujo panel) {
             
         this.panel = panel;
         this.posicion[X] = posicion.getX();
         this.posicion[Y] = posicion.getY();
         this.velocidad[X] = temperatura/100.0;
         this.velocidad[Y] = temperatura/100.0;
+        this.paredes = paredes;
     }
 
     // Lo sobreescribimos de la interfaz figura, lo implementamos
