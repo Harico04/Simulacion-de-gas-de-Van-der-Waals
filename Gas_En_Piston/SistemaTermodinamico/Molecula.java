@@ -17,39 +17,41 @@ import GUI.VentanaDibujo;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 
 public class Molecula extends Thread implements Figura {
 
-    //Posicion y tamaño de la molecula
-    private int alto, ancho;
-    private Point posicion;
+    // Tamaño de la molecula
+    private int radio;
 
-    // Representamos a la velocidad de la molecula como
-    // un vector el cual tiene componentes i y j.
-    private int velocidad[] = {1, 1};
+    // Coordenadas de las paredes del contenedor.
+    private double paredes[];
 
-    // Representamos la hitbox de la molecula con un cuadrado.
-    private Rectangle hitbox;
+    /*
+     * Movemos a la molecula con los vectores de posición y
+     * velocidad, consideramos que no tiene aceleración.
+     * Por lo tanto la velocidad es constante y la posición
+     * depende de a velocidad.
+     */
+    private double posicion[] = new double[2];
+    private double velocidad[] = new double[2];
+    private final int X = 0;
+    private final int Y = 0;
+    private final int ARRIBA = 0;
+    private final int DERECHA = 1;
+    private final int ABAJO = 2;
+    private final int IZQUIERDA = 3;
 
     // Panel en donde pintamos las moléculas.
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
-    public Molecula(Point posicion, int alto, int ancho, VentanaDibujo panel) {
-
-        this.alto = alto;
-        this.ancho = ancho;
+    public Molecula(Point posicion, int alto, int ancho, int temperatura, VentanaDibujo panel) {
+            
         this.panel = panel;
-        this.posicion = posicion;
-        this.setPriority(Thread.MAX_PRIORITY);
-
-        inicializar();
-    }
-
-    // Inicializamos las variables.
-    private void inicializar() {
-        hitbox = new Rectangle(posicion.x, posicion.y, ancho, alto);
+        this.posicion[X] = posicion.getX();
+        this.posicion[Y] = posicion.getY();
+        this.velocidad[X] = temperatura/100.0;
+        this.velocidad[Y] = temperatura/100.0;
     }
 
     // Lo sobreescribimos de la interfaz figura, lo implementamos
@@ -57,46 +59,38 @@ public class Molecula extends Thread implements Figura {
     @Override
     public void pintar(Graphics grafico){
         grafico.setColor(Color.RED);
-        grafico.fillOval(posicion.x, posicion.y , ancho, alto);
+        grafico.fillOval((int)posicion[X], (int)posicion[Y] , radio, radio);
     }
 
-    // esta funcion hace que se ejecute un nuevo hilo.
+    // Esta funcion hace que se ejecute un nuevo hilo.
     @Override
     public void run(){
         while(true){
-            actualizarMovimiento();
-            hitbox.setBounds(posicion.x, posicion.y, ancho, alto);
             panel.repaint();
+            actualizarVelocidad();
             try{
-                sleep(16); // simulamos 60 fps: 1000 milisegundos entre 60.
+                sleep(16); // simulamos 60 fps: 1000 milisegundos entre 60 = 16.
             }catch(InterruptedException ie){
-                System.out.println("Error: " + ie);
+                System.out.println("Error: " + ie); 
             }
         }
-    }
+    } 
+    
+    /*
+     * Actualiza la velocidad en base al tiempo y
+     * además verifica colisiones.
+     */
+    public void actualizarVelocidad(){
 
-    // Este metodo actualiza el movimiento en base al
-    // entorno de la molecula, puede ser afectado por una colisión
-    // con una pared o con otra molecula.
-    public void actualizarMovimiento(){
-        posicion.translate(velocidad[0], velocidad[1]);
-    }
+        // Verificacion de colisiones con las paredes.
+        if((paredes[ARRIBA] > posicion[Y] - radio) || (paredes[ABAJO] < posicion[Y] + radio))
+            velocidad[Y] *= -1;
+        if((paredes[IZQUIERDA] > posicion[X] - radio) || (paredes[DERECHA] < posicion[X] + radio))
+            velocidad[X] *= -1;
 
-    public void modificarDireccion(){
-        velocidad[0] *= (-1);
-        velocidad[1] *= (-1);
-    }
-
-    // Predicado que indica si hay una interseccion entre un
-    // entorno y la molécula.
-    public boolean verificarColision(Rectangle objeto){
-        if(this.hitbox.intersects(objeto))
-            return true;
-        return false ;
-    }
-
-    public Rectangle getHitbox(){
-        return this.hitbox;
+        // Actualizamos la velocidad.
+        posicion[X] += velocidad[X];
+        posicion[Y] += velocidad[Y];
     }
 }
 
