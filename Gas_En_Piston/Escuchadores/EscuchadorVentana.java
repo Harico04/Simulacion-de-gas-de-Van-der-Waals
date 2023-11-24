@@ -22,7 +22,7 @@ public class EscuchadorVentana extends WindowAdapter
     }
   }
 
-public void freezeAll() {
+public void freezeAll() throws InterruptedException{
     for (Thread thread : hilos) {
         if (thread != null) {
             synchronized (thread) {
@@ -74,7 +74,12 @@ public void unfreezeAll() {
     @Override
     public void windowDeactivated(WindowEvent e) {
       this.iconified = true;
+      try{
       this.freezeAll();
+      }catch(InterruptedException ie)
+      {
+
+      }
   }
 }
 
