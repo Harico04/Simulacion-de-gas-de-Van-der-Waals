@@ -7,7 +7,12 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.Timer;
+
 import GUI.PanelVariables;
 import GUI.VentanaDibujo;
 import SistemaTermodinamico.Gas;
@@ -20,11 +25,20 @@ public class Principal
         VentanaDibujo ventanaDibujo = new VentanaDibujo();
         PanelVariables panelVariables = new PanelVariables(ventanaDibujo);
         ven.setLayout(new BorderLayout());
-        ven.add(panelVariables, BorderLayout.EAST);
         ven.add(ventanaDibujo, BorderLayout.CENTER);
+        ven.add(panelVariables, BorderLayout.EAST);
         ven.setSize(new Dimension(1000, 1000));
         ven.setLocationRelativeTo(null);
         ven.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Inicio del timer para manejar fps
+        int fps=60;
+        Timer timer=new Timer(1000/fps,new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+               ventanaDibujo.repaint();
+            }
+        });
+        timer.start();
         ven.setVisible(true);  
     }
 }

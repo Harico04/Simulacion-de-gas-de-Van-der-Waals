@@ -37,10 +37,11 @@ public class PanelVariables extends JPanel{
     // Constructor del panel de variables.
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
-        inicializar();
-
+                
         gas= ventanaDibujo.getGas();
         piston= ventanaDibujo.getPiston();
+        
+        inicializar();
 
         setLayout(new GridLayout(0, 1));
 
@@ -82,7 +83,7 @@ public class PanelVariables extends JPanel{
                         volumen=gas.getVolumen();
                         variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
                         impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
-                        piston.setVolumen(volumen);
+                        piston.setVolumen(volumen,20);
                         variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
                     } 
         }
@@ -101,7 +102,7 @@ public class PanelVariables extends JPanel{
                 volumen=gas.getVolumen();
                 variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
                 impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
-                piston.setVolumen(volumen);
+                piston.setVolumen(volumen,20);
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
             }
             else
@@ -121,7 +122,7 @@ public class PanelVariables extends JPanel{
              volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
             gas.setVariables(presion, volumen, temperatura);
-            piston.setVolumen(volumen);
+            piston.setVolumen(volumen,20);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.VOLUMEN);
             if(listaDeProcesos.getSelectedItem().toString()=="Isotermico")
             {
@@ -149,6 +150,7 @@ public class PanelVariables extends JPanel{
             impresionVariables[i] = new JLabel();
  
         listaDeProcesos = new JComboBox<>(procesos);
+
         /*
          * Se otorga un ItemListener a listaDeProcesos, para poder establecer el tipo de proceso con el que se esta tratando.
          */
@@ -218,7 +220,7 @@ public class PanelVariables extends JPanel{
         // Configuramos el deslizador del volumen en litros.
         variables[Constantes.VOLUMEN].setMinimum(300);
         variables[Constantes.VOLUMEN].setMaximum(5000);
-        volumen=35;
+        volumen=22.27;
         variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
         variables[Constantes.VOLUMEN].setMajorTickSpacing(400);
         variables[Constantes.VOLUMEN].setMinorTickSpacing(100);
@@ -226,7 +228,9 @@ public class PanelVariables extends JPanel{
         variables[Constantes.VOLUMEN].setPaintLabels(false);
         variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
         impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
-
+        
+        gas.setVariables(presion, volumen, temperatura);
+        piston.setVolumen(volumen,20.0);
     }
 
     // vemos que proceso fue seleccionado, retornamos un valor
