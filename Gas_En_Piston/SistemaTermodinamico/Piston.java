@@ -62,7 +62,7 @@ public void pintar(Graphics g){
 }
   public double[] getParedes(){
     double[] coordenadas = new double[4];
-    coordenadas[0] = this.c1.getY();
+    coordenadas[0] = this.altura_piston;
     coordenadas[1] = this.c2.getX();
     coordenadas[2] = this.c2.getY();
     coordenadas[3] = this.c1.getX();
