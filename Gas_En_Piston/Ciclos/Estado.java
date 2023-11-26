@@ -4,13 +4,15 @@ public class Estado {
     private double presion;
     private double volumen;
     private String tipoDeProceso;
+    private int variableModificada;
 
-    public Estado(String tipoDeProceso, double temperatura, double volumen, double presion) {
+    public Estado(String tipoDeProceso, double temperatura, double volumen, double presion, int variableModificada) {
         this.temperatura = temperatura;
         this.presion = presion;
         this.volumen = volumen;
         this.tipoDeProceso = tipoDeProceso;
-    }
+        this.variableModificada = variableModificada;
+  }
 
     // Getters
     public double getTemperatura() {
@@ -28,7 +30,10 @@ public class Estado {
     public String getTipoDeProceso() {
         return tipoDeProceso;
     }
-
+    public int getVariableModificada(){
+        return variableModificada;
+    }
+  
     // Setters
     public void setTemperatura(double temperatura) {
         this.temperatura = temperatura;
@@ -45,10 +50,14 @@ public class Estado {
     public void setTipoDeProceso(String tipoDeProceso) {
         this.tipoDeProceso = tipoDeProceso;
     }
+    public vois setVariableModificada(int variableModificada){
+    this.variableModificada = variableModificada;
+  }
 
     @Override
     public String toString() {
         return "Tipo de proceso: " + tipoDeProceso + "\nTemperatura: " + temperatura +
-               "\nVolumen: " + volumen + "\nPresion: " + presion;
+               "\nVolumen: " + volumen + "\nPresion: " + presion + "\nVariable Modificada: " + variableModificada;
+
     }
 }
