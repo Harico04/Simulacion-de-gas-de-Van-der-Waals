@@ -51,11 +51,6 @@ public void pintar(Graphics g){
     g1.fillRect((int)c1.getX(), (int)(c2.getY()-altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
     g1.setColor(COLOR_TUBO);
     g1.fillRect((int) ((c1.getX() + c2.getX()) / 2 - 30), (int) (c1.getY()), 60, (int) (c2.getY() - altura_piston - 3.5*GROSOR_PISTON));
-    System.out.println("altura piston: "+altura_piston);
-    System.out.println("y "+c1.getY());
-    System.out.println("Altura tubo: "+ (c2.getY()-altura_piston-GROSOR_PISTON));
-
-
 
 
 
