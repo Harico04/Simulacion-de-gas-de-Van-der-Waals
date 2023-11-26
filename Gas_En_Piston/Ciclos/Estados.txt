@@ -1,0 +1,8 @@
+Inicial
+Temperatura = 0
+Volumen = 2.5
+Presion = 1
+Isotermico
+Temperatura = 0
+Volumen = 2.7
+Presion = 0.7
