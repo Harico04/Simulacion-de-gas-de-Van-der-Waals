@@ -1,3 +1,4 @@
+
 package Ciclos;
 
 import java.io.BufferedReader;
@@ -7,11 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import Ciclos.Estado;
 
 public class Lector {
-    FileReader fr;
-    List<Estado> ciclo;
-    List<String> datos;
+    private FileReader fr;
+    private List<Estado> ciclo;
+    private List<String> datos;
 
     public Lector(String archivo) {
         try {
@@ -22,6 +24,7 @@ public class Lector {
         this.ciclo = new ArrayList<>();
         this.datos = new ArrayList<>();
         leer();
+        cerrar();
 
     }
 
@@ -31,15 +34,16 @@ public class Lector {
     try{
             while ((linea = bfr.readLine()) != null) {
                 StringTokenizer stk = new StringTokenizer(linea, "=");
+        if(stk.countTokens()>=2){
                 stk.nextToken();
                 datos.add(stk.nextToken().trim());
-            
+          }
         }
       }
     catch(IOException ioe){
       System.out.println(ioe.toString());
     }
-     for(int i = 0; i<datos.size();i+=4){
+     for(int i = 0; i+3<datos.size();i+=4){
       Estado temp = new Estado(datos.get(i),
         Double.parseDouble(datos.get(i+1)),
         Double.parseDouble(datos.get(i+2)),
@@ -50,14 +54,15 @@ public class Lector {
   public List<Estado> getEstado(){
     return this.ciclo;
   }
-}
-class Estado{
-  double temperatura,presion,volumen;
-  String tipoDeProceso;
-  public Estado(String tipoDeProceso,double temperatura,double volumen, double presion){
-    this.temperatura = temperatura;
-    this.presion = presion;
-    this.volumen = volumen;
-    this.tipoDeProceso = tipoDeProceso;
+  public void cerrar(){
+    try{
+      if(fr!= null){
+        fr.close();
+      }
+    }
+    catch(IOException ioe){
+      System.out.println("No se pudo cerrar el archivo "+ ioe.toString());
+    }
+    
   }
 }
