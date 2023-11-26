@@ -34,6 +34,8 @@ public class PanelVariables extends JPanel{
     EscuchadorPresion escPresion;
     EscuchadorTemperatura escTemperatura;
     EscuchadorVolumen escVolumen;
+    private final double P_MAX=5,V_MAX=50,T_MAX=600;
+    private final double P_MIN=1,V_MIN=2,T_MIN=135;
     // Constructor del panel de variables.
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
@@ -47,13 +49,13 @@ public class PanelVariables extends JPanel{
 
         add(new JLabel("--Tipo de Proceso--"));
         add(listaDeProcesos);
-        add(new JLabel("--Temperatura (K)--[260, 400]"));
+        add(new JLabel("--Temperatura (K)--[135, 600]"));
         add(variables[Constantes.TEMPERATURA]);
         add(impresionVariables[Constantes.TEMPERATURA]);
-        add(new JLabel("--Presión (atm)--[.1, 11]"));
+        add(new JLabel("--Presión (atm)--[1, 5]"));
         add(variables[Constantes.PRESION]);
         add(impresionVariables[Constantes.PRESION]);
-        add(new JLabel("--Volumen (L)--[3, 50]"));
+        add(new JLabel("--Volumen (L)--[1, 50]"));
         add(variables[Constantes.VOLUMEN]);
         add(impresionVariables[Constantes.VOLUMEN]);
         add(new JLabel("Elaborado por:"));
@@ -65,10 +67,17 @@ public class PanelVariables extends JPanel{
     {
         public void stateChanged(ChangeEvent e)
         {
+            double auxPresion=presion;
              presion = variables[Constantes.PRESION].getValue()/100.0f;
                     impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
                     gas.setVariables(presion, volumen, temperatura);
                     gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.PRESION);
+                    if(gas.getVolumen()>V_MAX||gas.getVolumen()<V_MIN||gas.getTemperatura()>T_MAX||gas.getTemperatura()<T_MIN)
+                    {
+                        variables[Constantes.PRESION].setValue((int)(auxPresion*100));
+                        gas.setVariables(presion, volumen, temperatura);
+                        return;
+                    }
                     if(listaDeProcesos.getSelectedItem().toString()=="Isometrico")
                     {
                         variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
@@ -92,10 +101,17 @@ public class PanelVariables extends JPanel{
     {
         public void stateChanged(ChangeEvent e)
         {
-             temperatura = variables[Constantes.TEMPERATURA].getValue()/100.0f;
+            double auxTemperatura=temperatura;
+            temperatura = variables[Constantes.TEMPERATURA].getValue()/100.0f;
             impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
             gas.setVariables(presion, volumen, temperatura);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.TEMPERATURA);
+            if(gas.getVolumen()>V_MAX||gas.getVolumen()<V_MIN||gas.getPresion()>P_MAX||gas.getPresion()<P_MIN)
+            {
+                variables[Constantes.TEMPERATURA].setValue((int)(auxTemperatura*100));
+                gas.setVariables(presion, volumen, temperatura);
+                return;
+            }
             if(listaDeProcesos.getSelectedItem().toString()=="Isobarico")
             { 
                 variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
@@ -119,11 +135,18 @@ public class PanelVariables extends JPanel{
     {
         public void stateChanged(ChangeEvent e)
         {
+            double auxVolumen=volumen;
              volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
             gas.setVariables(presion, volumen, temperatura);
             piston.setVolumen(volumen,20);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.VOLUMEN);
+            if(gas.getTemperatura()>T_MAX||gas.getTemperatura()<T_MIN||gas.getPresion()>P_MAX||gas.getPresion()<P_MIN)
+            {
+                variables[Constantes.VOLUMEN].setValue((int)(auxVolumen*100));
+                gas.setVariables(presion, volumen, temperatura);
+                return;
+            }
             if(listaDeProcesos.getSelectedItem().toString()=="Isotermico")
             {
                 variables[Constantes.PRESION].removeChangeListener(escPresion);
@@ -192,8 +215,8 @@ public class PanelVariables extends JPanel{
 
         // Configuramos el deslizador de la temperatura en
         // base a la escala kelvin.
-        variables[Constantes.TEMPERATURA].setMinimum(26000);
-        variables[Constantes.TEMPERATURA].setMaximum(40000);
+        variables[Constantes.TEMPERATURA].setMinimum((int)(T_MIN*100));
+        variables[Constantes.TEMPERATURA].setMaximum((int)(T_MAX*100));
         temperatura=273;
         variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100.0));
         variables[Constantes.TEMPERATURA].setMajorTickSpacing(2000);
@@ -206,8 +229,8 @@ public class PanelVariables extends JPanel{
 
         // Configuramos el deslizador de la presion en 
         // atmosferas x 10^1.
-        variables[Constantes.PRESION].setMinimum(70);
-        variables[Constantes.PRESION].setMaximum(1100);
+        variables[Constantes.PRESION].setMinimum((int)(P_MIN*100));
+        variables[Constantes.PRESION].setMaximum((int)(P_MAX*100));
         presion=1;
         variables[Constantes.PRESION].setValue((int)(presion*100.0));
         variables[Constantes.PRESION].setMajorTickSpacing(100);
@@ -218,8 +241,8 @@ public class PanelVariables extends JPanel{
         impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
 
         // Configuramos el deslizador del volumen en litros.
-        variables[Constantes.VOLUMEN].setMinimum(300);
-        variables[Constantes.VOLUMEN].setMaximum(5000);
+        variables[Constantes.VOLUMEN].setMinimum((int)(V_MIN*100));
+        variables[Constantes.VOLUMEN].setMaximum((int)(V_MAX*100));
         volumen=22.27;
         variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
         variables[Constantes.VOLUMEN].setMajorTickSpacing(400);
