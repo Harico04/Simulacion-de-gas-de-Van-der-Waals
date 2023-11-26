@@ -74,8 +74,6 @@ public class PanelVariables extends JPanel{
     {
         public void stateChanged(ChangeEvent e)
         {
-            listaDeProcesos.setSelectedIndex(0);
-            cicloActivo=false;
             double auxPresion=presion;
              presion = variables[Constantes.PRESION].getValue()/100.0f;
                     impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
@@ -110,8 +108,6 @@ public class PanelVariables extends JPanel{
     {
         public void stateChanged(ChangeEvent e)
         {
-            listaDeProcesos.setSelectedIndex(0);
-            cicloActivo=false;
             double auxTemperatura=temperatura;
             temperatura = variables[Constantes.TEMPERATURA].getValue()/100.0f;
             impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
@@ -148,7 +144,6 @@ public class PanelVariables extends JPanel{
         public void stateChanged(ChangeEvent e)
         {
             listaDeProcesos.setSelectedIndex(0);
-            cicloActivo=false;
             double auxVolumen=volumen;
              volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
@@ -178,24 +173,6 @@ public class PanelVariables extends JPanel{
                 variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
             } 
         }
-    }
-    //Realiza el proceso y la animacion de un ciclo cuando pasa de un 
-    //Estado a otro
-    private void transicionEstados(Estado estadoAnterior, Estado estadoActual)
-    {
-        double cambioPresion=(estadoActual.getPresion()-estadoAnterior.getPresion())/180;
-        double cambioTemperatura=(estadoActual.getTemperatura()-estadoAnterior.getTemperatura())/180;
-        double cambioVolumen=(estadoActual.getVolumen()-estadoAnterior.getVolumen())/180;
-        switch(estadoActual.getTipoDeProceso())
-        {
-            case "Isotermico":
-            for(int i=0;i<180;i++)
-            {
-                
-                gas.calcularVariables(estadoActual.getTipoDeProceso(), Gas.PRESION);
-            }
-        }
-
     }
     // Se inicializan las variables.
     protected void inicializar(){
@@ -286,26 +263,6 @@ public class PanelVariables extends JPanel{
         
         gas.setVariables(presion, volumen, temperatura);
         piston.setVolumen(volumen,20.0);
-
-        //Introducimos la opcion de ciclos y colocamos las opciones en
-        //una JComboBox
-        listadoCiclos=new JComboBox<>(ciclos);
-        //Otorgamos un ItemListener para reconocer cuando se desea ejecutar un ciclo
-        listadoCiclos.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e)
-            {
-                //Abrimos, leemos y cerramos el archivo que contiene los estados por los que pasar
-                try
-                {
-                    lector= new Lector(""+listadoCiclos.getSelectedItem().toString()+".txt");
-                }catch(IOException ioe){
-                    System.out.println("Error al leer el archivo"+ioe);
-                }
-                if(cicloActivo) return;
-                cicloActivo=true;
-
-            }
-        });
 
     }
 
