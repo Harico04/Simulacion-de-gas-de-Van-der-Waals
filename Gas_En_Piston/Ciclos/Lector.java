@@ -40,6 +40,7 @@ public class Lector {
           }
         }
       }
+
     catch(IOException ioe){
       System.out.println(ioe.toString());
     }
@@ -50,6 +51,12 @@ public class Lector {
         Double.parseDouble(datos.get(i+3)));
       ciclo.add(temp);
     }   
+  }
+public void imprimirEstados(){
+    for (Estado estado : ciclo) {
+     System.out.println(estado.toString());
+    }
+    System.out.println(datos.toString());
   }
   public List<Estado> getEstado(){
     return this.ciclo;
