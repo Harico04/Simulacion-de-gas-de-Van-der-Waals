@@ -3,42 +3,53 @@
  */
 package GUI;
 
-import SistemaTermodinamico.Molecula;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import SistemaTermodinamico.Molecula;
 import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
+import SistemaTermodinamico.Colision;
 
 public class VentanaDibujo extends JPanel
 {
     private Gas gas;
     private Piston piston;
     private Molecula moleculas[];
-    private double paredes[];
+    private Colision colision;
 
     public VentanaDibujo()
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
         this.piston= new Piston(new Point(50,100), new Point(700,750), 35.0, this,20);
-        moleculas = new Molecula[1];
-        //moleculas[0] = new Molecula(new Point(150, 150), 10, 100, gas.,this);
-
+        moleculas = new Molecula[10];
+        moleculas[0] = new Molecula(new Point(300, 600), 10, 300, piston.getParedes(),this);
+        moleculas[1] = new Molecula(new Point(350, 600), 10, 300, piston.getParedes(),this);
+        moleculas[2] = new Molecula(new Point(250, 600), 10, 300, piston.getParedes(),this);
+        moleculas[3] = new Molecula(new Point(400, 600), 10, 300, piston.getParedes(),this);
+        moleculas[4] = new Molecula(new Point(200, 600), 10, 300, piston.getParedes(),this);
+        moleculas[5] = new Molecula(new Point(300, 650), 10, 300, piston.getParedes(),this);
+        moleculas[6] = new Molecula(new Point(350, 650), 10, 300, piston.getParedes(),this);
+        moleculas[7] = new Molecula(new Point(250, 650), 10, 300, piston.getParedes(),this);
+        moleculas[8] = new Molecula(new Point(400, 650), 10, 300, piston.getParedes(),this);
+        moleculas[9] = new Molecula(new Point(200, 650), 10, 300, piston.getParedes(),this);
         
-       
-        //colisiones.start();
-        //moleculas[0].start();
+
+        colision = new Colision(moleculas);
+
         gas.start();
         piston.start();
+        for(Molecula molecula: moleculas)
+            molecula.start();
+        colision.start();
+        
+      
         setPreferredSize(new Dimension(700, 700));
-
     }
 
     @Override
@@ -55,7 +66,8 @@ public class VentanaDibujo extends JPanel
         // Dibuja la molecula.
         piston.pintar(g2);
         gas.pintar(g2);
-        //moleculas[0].pintar(g2);
+         for(Molecula molecula: moleculas)
+            molecula.pintar(g2);
     }
 
     public Gas getGas(){

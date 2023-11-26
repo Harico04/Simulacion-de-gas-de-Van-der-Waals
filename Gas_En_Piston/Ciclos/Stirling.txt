@@ -1,8 +1,13 @@
+
 Tipo de proceso = Isocorico
 Temperatura = 381.07
 Volumen = 10.77
 Presion = 2.90
 Variable Modificada = 0
+Tipo de proceso = Inicial
+Temperatura = 381.07
+Volumen = 10.77
+Presion = 2.90
 Tipo de proceso = Isotermico
 Temperatura = 381.07
 Volumen = 22.12
@@ -18,3 +23,8 @@ Temperatura = 135.38
 Volumen = 8.2
 Presion = 1.34
 Variable Modificada = 1
+Tipo de proceso = Isocorico
+Temperatura = 381.07
+Volumen = 10.77
+Presion = 2.90
+

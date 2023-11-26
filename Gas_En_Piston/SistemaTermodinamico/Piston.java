@@ -38,11 +38,11 @@ public class Piston extends Thread implements GUI.Figura
   public void setVolumen(double volumen, double radio){
     this.volumen = volumen;
     this.radio = radio;
-    altura_piston = this.volumen/(Math.PI)*(Math.pow(this.radio, 2));
+    altura_piston = escalaPixeles*(1000*this.volumen)/(Math.PI)*(Math.pow(this.radio, 2));
   }
 
 public void pintar(Graphics g){
-    double altura_piston = escalaPixeles*(1000*this.volumen)/(Math.PI*Math.pow(this.radio, 2));
+    altura_piston = escalaPixeles*(1000*this.volumen)/(Math.PI*Math.pow(this.radio, 2));
     Graphics2D g1 = (Graphics2D) g;
     grosor = (int)(c2.getX()-c1.getX());
     g1.setColor(COLOR_CONTENEDOR);
@@ -52,16 +52,11 @@ public void pintar(Graphics g){
     g1.setColor(COLOR_TUBO);
     g1.fillRect((int) ((c1.getX() + c2.getX()) / 2 - 30), (int) (c1.getY()), 60, (int) (c2.getY() - altura_piston - 3.5*GROSOR_PISTON));
 
-
-
 }
+    
   public double[] getParedes(){
-    double[] coordenadas = new double[4];
-    coordenadas[0] = this.altura_piston;
-    coordenadas[1] = this.c2.getX();
-    coordenadas[2] = this.c2.getY();
-    coordenadas[3] = this.c1.getX();
-    return coordenadas;
+      double[] coordenadas={altura_piston,c2.getX(),c2.getY(),c1.getX()};
+      return coordenadas;
   }
 }
 

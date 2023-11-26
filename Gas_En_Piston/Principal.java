@@ -31,7 +31,7 @@ public class Principal
         ven.setLocationRelativeTo(null);
         ven.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Inicio del timer para manejar fps
-        int fps=60;
+        int fps=120;
         Timer timer=new Timer(1000/fps,new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {

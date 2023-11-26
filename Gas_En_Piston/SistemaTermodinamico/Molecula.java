@@ -17,11 +17,13 @@ import GUI.VentanaDibujo;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 public class Molecula extends Thread implements Figura {
 
     // Tamaño de la molecula
-    private int radio;
+    private double radio;
 
     // Coordenadas de las paredes del contenedor.
     private double paredes[];
@@ -35,7 +37,7 @@ public class Molecula extends Thread implements Figura {
     private double posicion[] = new double[2];
     private double velocidad[] = new double[2];
     private final int X = 0;
-    private final int Y = 0;
+    private final int Y = 1;
     private final int ARRIBA = 0;
     private final int DERECHA = 1;
     private final int ABAJO = 2;
@@ -45,7 +47,7 @@ public class Molecula extends Thread implements Figura {
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
-    public Molecula(Point posicion, int radio, int temperatura, double[] paredes,VentanaDibujo panel) {
+    public Molecula(Point posicion, double radio, double temperatura, double[] paredes,VentanaDibujo panel) {
             
         this.panel = panel;
         this.posicion[X] = posicion.getX();
@@ -53,6 +55,7 @@ public class Molecula extends Thread implements Figura {
         this.velocidad[X] = temperatura/100.0;
         this.velocidad[Y] = temperatura/100.0;
         this.paredes = paredes;
+        this.radio = radio;
     }
 
     // Lo sobreescribimos de la interfaz figura, lo implementamos
@@ -60,7 +63,7 @@ public class Molecula extends Thread implements Figura {
     @Override
     public void pintar(Graphics grafico){
         grafico.setColor(Color.RED);
-        grafico.fillOval((int)posicion[X], (int)posicion[Y] , radio, radio);
+        grafico.fillOval((int)posicion[X], (int)posicion[Y] , (int)radio, (int)radio);
     }
 
     // Esta funcion hace que se ejecute un nuevo hilo.
@@ -86,12 +89,32 @@ public class Molecula extends Thread implements Figura {
         // Verificacion de colisiones con las paredes.
         if((paredes[ARRIBA] > posicion[Y] - radio) || (paredes[ABAJO] < posicion[Y] + radio))
             velocidad[Y] *= -1;
-        if((paredes[IZQUIERDA] > posicion[X] - radio) || (paredes[DERECHA] < posicion[X] + radio))
-            velocidad[X] *= -1;
+
+        if((paredes[DERECHA] < posicion[X] + radio) || (paredes[IZQUIERDA] > posicion[X] - radio))
+            velocidad[X] *= -1;        
 
         // Actualizamos la velocidad.
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
+    }
+
+    // getter para el vector de velocidad.
+    public double[] getVelocidad(){
+        return this.velocidad;
+    }
+
+    // setter para el vector de velocidad.
+    public void setVelocidad(double Vx, double Vy){
+        this.velocidad[X] = Vx;
+        this.velocidad[Y] = Vy;
+    }
+
+    public double getRadio(){
+        return this.radio;
+    }
+
+    public Point2D.Double getPosicion(){
+        return new Point2D.Double(posicion[X], posicion[Y]);
     }
 }
 

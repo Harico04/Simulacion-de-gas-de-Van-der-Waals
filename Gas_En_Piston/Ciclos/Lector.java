@@ -15,12 +15,8 @@ public class Lector {
     private List<Estado> ciclo;
     private List<String> datos;
 
-    public Lector(String archivo) {
-        try {
-            this.fr = new FileReader(archivo);
-        } catch (IOException ioe) {
-            System.out.println(ioe.toString());
-        }
+    public Lector(String archivo) throws IOException{
+        this.fr = new FileReader(archivo);
         this.ciclo = new ArrayList<>();
         this.datos = new ArrayList<>();
         leer();
@@ -28,10 +24,9 @@ public class Lector {
 
     }
 
-    public void leer() {
+    public void leer() throws IOException{
         BufferedReader bfr = new BufferedReader(this.fr);
             String linea;
-    try{
             while ((linea = bfr.readLine()) != null) {
                 StringTokenizer stk = new StringTokenizer(linea, "=");
         if(stk.countTokens()>=2){
@@ -39,11 +34,6 @@ public class Lector {
                 datos.add(stk.nextToken().trim());
           }
         }
-      }
-
-    catch(IOException ioe){
-      System.out.println(ioe.toString());
-    }
      for(int i = 0; i+4<datos.size();i+=5){
       Estado temp = new Estado(datos.get(i),
         Double.parseDouble(datos.get(i+1)),
@@ -58,18 +48,12 @@ public class Lector {
       }
     System.out.println(datos.toString());
   }
-  public List<Estado> getEstado(){
+  public List<Estado> getEstados(){
     return this.ciclo;
   }
-  public void cerrar(){
-    try{
+  public void cerrar() throws IOException{
       if(fr!= null){
         fr.close();
       }
-    }
-    catch(IOException ioe){
-      System.out.println("No se pudo cerrar el archivo "+ ioe.toString());
-    }
-    
-  }
+   }
 }
