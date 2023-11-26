@@ -23,6 +23,8 @@ public class Piston extends Thread implements GUI.Figura
   private int escalaPixeles;
   Point c1,c2,p1,p2;
   private Rectangle piston,pA,pD,pI;
+  private double[] coordenadas;
+
   public Piston(Point c1, Point c2,double volumen, VentanaDibujo panel,double radio){ 
     this.c1 = c1;
     this.c2 = c2;
@@ -34,6 +36,11 @@ public class Piston extends Thread implements GUI.Figura
      pA = new Rectangle((int) c1.getX(), (int)c2.getY(),(int)(c2.getX()-c1.getX()) , 1);
      escalaPixeles=(int)(c2.getY()-c1.getY())/50;
      altura_piston = escalaPixeles*(1000*this.volumen)/((Math.PI)*(Math.pow(this.radio, 2)));
+     coordenadas= new double[4];
+     coordenadas[0]=c2.getY()-altura_piston;
+     coordenadas[1]=c2.getX();
+     coordenadas[2]=c2.getY();
+     coordenadas[3]=c1.getX();
   }
   public void setVolumen(double volumen, double radio){
     this.volumen = volumen;
@@ -45,17 +52,19 @@ public void pintar(Graphics g){
     altura_piston = escalaPixeles*(1000*this.volumen)/(Math.PI*Math.pow(this.radio, 2));
     Graphics2D g1 = (Graphics2D) g;
     grosor = (int)(c2.getX()-c1.getX());
+    //Pintar el contenedor
     g1.setColor(COLOR_CONTENEDOR);
     g1.drawRect((int) c1.getX(), (int)c1.getY(),grosor,(int)(c2.getY()-c1.getY()));
+    //Pintar el piston
     g1.setColor(COLOR_PISTON);
     g1.fillRect((int)c1.getX(), (int)(c2.getY()-altura_piston-GROSOR_PISTON), grosor, GROSOR_PISTON); 
+    //Pintar el tubo
     g1.setColor(COLOR_TUBO);
     g1.fillRect((int) ((c1.getX() + c2.getX()) / 2 - 30), (int) (c1.getY()), 60, (int) (c2.getY() - altura_piston - 3.5*GROSOR_PISTON));
-
+    coordenadas[0]=c2.getY()-altura_piston;
 }
     
   public double[] getParedes(){
-      double[] coordenadas={altura_piston,c2.getX(),c2.getY(),c1.getX()};
       return coordenadas;
   }
 }

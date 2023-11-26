@@ -143,7 +143,6 @@ public class PanelVariables extends JPanel{
 
         public void stateChanged(ChangeEvent e)
         {
-            listaDeProcesos.setSelectedIndex(0);
             double auxVolumen=volumen;
              volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
