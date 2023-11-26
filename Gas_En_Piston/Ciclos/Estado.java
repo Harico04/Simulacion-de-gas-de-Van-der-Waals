@@ -1,4 +1,5 @@
 package Ciclos;
+
 public class Estado {
     private double temperatura;
     private double presion;
