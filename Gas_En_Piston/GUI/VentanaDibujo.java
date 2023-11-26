@@ -26,7 +26,7 @@ public class VentanaDibujo extends JPanel
     public VentanaDibujo()
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
-        this.piston= new Piston(new Point(50,100), new Point(700,750), 35.0, this,20);
+        this.piston= new Piston(new Point(50,100), new Point(700,750), 22.27, this,20);
         moleculas = new Molecula[10];
         moleculas[0] = new Molecula(new Point(300, 600), 10, 300, piston.getParedes(),this);
         moleculas[1] = new Molecula(new Point(350, 600), 10, 300, piston.getParedes(),this);

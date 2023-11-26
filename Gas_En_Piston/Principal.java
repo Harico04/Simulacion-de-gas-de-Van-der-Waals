@@ -30,15 +30,6 @@ public class Principal
         ven.setSize(new Dimension(1000, 1000));
         ven.setLocationRelativeTo(null);
         ven.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Inicio del timer para manejar fps
-        int fps=120;
-        Timer timer=new Timer(1000/fps,new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-               ventanaDibujo.repaint();
-            }
-        });
-        timer.start();
         ven.setVisible(true);  
     }
 }
