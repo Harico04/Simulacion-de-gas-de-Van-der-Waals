@@ -49,7 +49,7 @@ public class Gas extends Thread implements GUI.Figura
     private double aproximarVolumen()
     {
         double valor=V_MAX;
-        for(int i=0;i<5;i++)
+        for(int i=0;i<10;i++)
         {
             valor=valor-(presion*Math.pow(valor, 3)-(constante_b*presion+R*temperatura)*Math.pow(valor, 2)+constante_a*valor-constante_a*constante_b)/
             (3*presion*Math.pow(valor, 2)+2*-(constante_b*presion+R*temperatura)*valor+constante_a);
@@ -92,6 +92,7 @@ public class Gas extends Thread implements GUI.Figura
         this.presion=p;
         this.volumen=v;
         this.temperatura=T;
+        System.out.println("Valores actuales: "+p+", "+v+", "+T);
     }
     /*
      * retorna el valor de presion actual
