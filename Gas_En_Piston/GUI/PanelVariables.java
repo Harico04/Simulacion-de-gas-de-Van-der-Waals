@@ -17,6 +17,7 @@ import Ciclos.Lector;
 import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
 
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.util.List;
 import java.awt.event.ItemEvent;
@@ -41,15 +42,16 @@ public class PanelVariables extends JPanel{
     EscuchadorVolumen escVolumen;
     private final double P_MAX=5,V_MAX=50,T_MAX=600;
     private final double P_MIN=1,V_MIN=2,T_MIN=135;
+    private VentanaDibujo lienzo;
     private Lector lector;
-    private boolean cicloActivo=false;
+    private ManejadorCiclos manCiclos;
     // Constructor del panel de variables.
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
                 
         gas= ventanaDibujo.getGas();
         piston= ventanaDibujo.getPiston();
-        
+        lienzo=ventanaDibujo;
         inicializar();
 
         setLayout(new GridLayout(0, 1));
@@ -65,6 +67,7 @@ public class PanelVariables extends JPanel{
         add(new JLabel("--Volumen (L)--[1, 50]"));
         add(variables[Constantes.VOLUMEN]);
         add(impresionVariables[Constantes.VOLUMEN]);
+        add(listadoCiclos);
         add(new JLabel("Elaborado por:"));
         add(new JLabel("Manuel Eduardo Gortarez Blanco"));
         add(new JLabel("Fausto Misael Medina Lugo"));
@@ -144,7 +147,7 @@ public class PanelVariables extends JPanel{
         public void stateChanged(ChangeEvent e)
         {
             double auxVolumen=volumen;
-             volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
+            volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
             gas.setVariables(presion, volumen, temperatura);
             piston.setVolumen(volumen,20);
@@ -263,6 +266,13 @@ public class PanelVariables extends JPanel{
         gas.setVariables(presion, volumen, temperatura);
         piston.setVolumen(volumen,20.0);
 
+        //Creamos la seccion de ciclos
+        listadoCiclos= new JComboBox<>(ciclos);
+        listadoCiclos.setSelectedItem(ciclos[2]);
+        //Comenzamos el manejador de ciclos, que estara pendiente
+        //De cuando se desee realizar uno
+        manCiclos=new ManejadorCiclos();
+        manCiclos.start();
     }
 
     // vemos que proceso fue seleccionado, retornamos un valor
@@ -298,8 +308,111 @@ public class PanelVariables extends JPanel{
     public void setVolumenPanel(int volumen){
         variables[Constantes.VOLUMEN].setValue(volumen*100);
     }
-}
 
+class ManejadorCiclos extends Thread
+{
+    public void run()
+    {
+        String seleccionado= listadoCiclos.getSelectedItem().toString();
+        if(seleccionado=="------") return;
+        else
+        {
+            //Intentamos leer el archivo
+            try
+            {
+                lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
+            }catch(IOException ioe)
+            {
+                System.out.println("Error al leer el archivo "+ioe);
+            }
+            int iEstado=0;
+            Estado estadoActual= lector.getEstados().get(iEstado);
+            Estado estadoAnterior;
+            gas.setVariables(estadoActual.getPresion(), estadoActual.getVolumen(), estadoActual.getTemperatura());
+            //Colocar el estado inicial en el gas y en el panel
+            variables[Constantes.PRESION].removeChangeListener(escPresion);
+            variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+            variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+            variables[Constantes.PRESION].setValue((int)(100*estadoActual.getPresion()));
+            variables[Constantes.VOLUMEN].setValue((int)(100*estadoActual.getVolumen()));
+            variables[Constantes.TEMPERATURA].setValue((int)(100*estadoActual.getTemperatura()));
+            variables[Constantes.PRESION].addChangeListener(escPresion);
+            variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+            variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+            presion=estadoActual.getPresion();
+            volumen=estadoActual.getVolumen();
+            temperatura=estadoActual.getTemperatura();
+            System.out.println(""+variables[Constantes.PRESION].getValue()+variables[Constantes.VOLUMEN].getValue()+variables[Constantes.TEMPERATURA].getValue());
+            boolean cicloActivo=true;
+            while(cicloActivo)
+            {
+                if(listadoCiclos.getSelectedItem()=="------") return;
+                estadoAnterior=estadoActual;
+                iEstado=++iEstado%4;
+                System.out.println(iEstado);
+                estadoActual=lector.getEstados().get(iEstado);
+                listaDeProcesos.setSelectedItem(estadoActual.getTipoDeProceso());
+                System.out.println(listaDeProcesos.getSelectedItem());
+                System.out.println(estadoActual.getVariableModificada());
+                switch(estadoActual.getVariableModificada())
+                {
+                    case Gas.PRESION:
+                        double cambioPresion=estadoActual.getPresion()-estadoAnterior.getPresion();
+                        for(int i=0;i<60;i++)
+                        {
+                            variables[Constantes.PRESION].setValue((int)(variables[Constantes.PRESION].getValue()+cambioPresion*1.666666));
+                            System.out.println("Presion modificada: "+variables[Constantes.PRESION].getValue());
+                            lienzo.repaint();
+                            try
+                            {
+                                Thread.sleep(16);
+                            }catch(InterruptedException ie)
+                            {
+                                System.out.println("Error: "+ie);
+                            }
+                        }
+                        
+                    break;
+
+                    case Gas.TEMPERATURA:
+                        double cambioTemperatura= estadoActual.getTemperatura()-estadoAnterior.getTemperatura();
+                        for(int i=0;i<60;i++)
+                        {
+                            variables[Constantes.TEMPERATURA].setValue((int)(variables[Constantes.TEMPERATURA].getValue()+cambioTemperatura*1.666666));
+                            System.out.println("Temperatura modificada: "+variables[Constantes.TEMPERATURA].getValue()); 
+                            lienzo.repaint();
+                            try
+                            {
+                                Thread.sleep(16);
+                            }catch(InterruptedException ie)
+                            {
+                                System.out.println("Error: "+ie);
+                            }
+                        }
+                    break;
+
+                    case Gas.VOLUMEN:
+                        double cambioVolumen=estadoActual.getVolumen()-estadoAnterior.getVolumen();
+                        for(int i=0;i<60;i++)
+                        {
+                            variables[Constantes.VOLUMEN].setValue((int)(variables[Constantes.VOLUMEN].getValue()+cambioVolumen*1.666666));
+                            System.out.println("Volumen modificado: "+variables[Constantes.VOLUMEN].getValue());
+                            lienzo.repaint();
+                            try
+                            {
+                                Thread.sleep(16);
+                            }catch(InterruptedException ie)
+                            {
+                                System.out.println("Error: "+ie);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    }
+}
+}
 class Constantes{
     
     //Enumeraciones

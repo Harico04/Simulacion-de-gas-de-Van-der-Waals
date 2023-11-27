@@ -18,7 +18,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
 public class Molecula extends Thread implements Figura {
 
@@ -52,8 +51,8 @@ public class Molecula extends Thread implements Figura {
         this.panel = panel;
         this.posicion[X] = posicion.getX();
         this.posicion[Y] = posicion.getY();
-        this.velocidad[X] = temperatura/100.0;
-        this.velocidad[Y] = temperatura/100.0;
+        this.velocidad[X] = temperatura/500000.0;
+        this.velocidad[Y] = temperatura/500000.0;
         this.paredes = paredes;
         this.radio = radio;
     }
@@ -72,11 +71,6 @@ public class Molecula extends Thread implements Figura {
         while(true){
             panel.repaint();
             actualizarVelocidad();
-            try{
-                sleep(16); // simulamos 60 fps: 1000 milisegundos entre 60 = 16.
-            }catch(InterruptedException ie){
-                System.out.println("Error: " + ie); 
-            }
         }
     } 
     
@@ -87,11 +81,32 @@ public class Molecula extends Thread implements Figura {
     public void actualizarVelocidad(){
 
         // Verificacion de colisiones con las paredes.
-        if((paredes[ARRIBA] > posicion[Y] - radio) || (paredes[ABAJO] < posicion[Y] + radio))
-            velocidad[Y] *= -1;
+        if((paredes[ARRIBA] > posicion[Y] - radio)){            
+            if(velocidad[Y] == 0) velocidad[Y] = 100;
+            if(velocidad[Y] * (-1) > 0)
+                velocidad[Y] *= -1;
+        }
 
-        if((paredes[DERECHA] < posicion[X] + radio) || (paredes[IZQUIERDA] > posicion[X] - radio))
-            velocidad[X] *= -1;        
+        if(posicion[Y] < paredes[ARRIBA] - radio)
+            posicion[Y] = paredes[ARRIBA] + 2*radio;            
+
+        if(paredes[ABAJO] < posicion[Y] + radio){
+            if(velocidad[Y] == 0) velocidad[Y] = -100;
+            if(velocidad[Y] * (-1) < 0)
+                velocidad[Y] *= -1;
+        }
+
+        if(paredes[DERECHA] < posicion[X] + radio){
+            if(velocidad[X] == 0) velocidad[X] = -100;
+            if(velocidad[X] * (-1) < 0)
+                velocidad[X] *= -1;
+        }
+        
+        if(paredes[IZQUIERDA] > posicion[X] - radio){
+            if (velocidad[X] == 0) velocidad[X] = 100;
+            if(velocidad[X] * (-1) > 0)
+                velocidad[X] *= -1;
+        } 
 
         // Actualizamos la velocidad.
         posicion[X] += velocidad[X];
