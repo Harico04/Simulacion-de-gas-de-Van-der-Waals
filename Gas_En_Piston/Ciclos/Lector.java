@@ -35,11 +35,12 @@ public class Lector {
           }
         }
      for(int i = 0; i+4<datos.size();i+=5){
-      Estado temp = new Estado(datos.get(i),
-        Double.parseDouble(datos.get(i+1)),
-        Double.parseDouble(datos.get(i+2)),
-        Double.parseDouble(datos.get(i+3)));
-      ciclo.add(temp);
+         Estado temp = new Estado(datos.get(i),
+                                  Double.parseDouble(datos.get(i+1)),
+                                  Double.parseDouble(datos.get(i+2)),
+                                  Double.parseDouble(datos.get(i+3)),
+                                  Integer.parseInt(datos.get(i+4)));
+         ciclo.add(temp);
     }   
   }
     public void imprimirEstados(){
