@@ -16,7 +16,7 @@ import javax.swing.Timer;
 import GUI.PanelVariables;
 import GUI.VentanaDibujo;
 import SistemaTermodinamico.Gas;
-import SistemaTermodinamico.Piston;
+import SistemaTermodinamico.Piston;       
 
 public class Principal
 {

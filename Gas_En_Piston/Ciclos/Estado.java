@@ -51,7 +51,7 @@ public class Estado {
     public void setTipoDeProceso(String tipoDeProceso) {
         this.tipoDeProceso = tipoDeProceso;
     }
-    public vois setVariableModificada(int variableModificada){
+    public void setVariableModificada(int variableModificada){
     this.variableModificada = variableModificada;
   }
 

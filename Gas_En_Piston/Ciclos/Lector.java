@@ -38,7 +38,7 @@ public class Lector {
       Estado temp = new Estado(datos.get(i),
         Double.parseDouble(datos.get(i+1)),
         Double.parseDouble(datos.get(i+2)),
-        Double.parseDouble(datos.get(i+3)));
+        Double.parseDouble(datos.get(i+3)),Integer.parseInt(datos.get(i+4))); 
       ciclo.add(temp);
     }   
   }
