@@ -41,12 +41,12 @@ public class Molecula extends Thread implements Figura {
     private final int DERECHA = 1;
     private final int ABAJO = 2;
     private final int IZQUIERDA = 3;
-
+    private Gas gas;
     // Panel en donde pintamos las moléculas.
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
-    public Molecula(Point posicion, double radio, double temperatura, double[] paredes,VentanaDibujo panel) {
+    public Molecula(Point posicion, double radio, Double temperatura, double[] paredes,VentanaDibujo panel,Gas g) {
             
         this.panel = panel;
         this.posicion[X] = posicion.getX();
@@ -55,14 +55,17 @@ public class Molecula extends Thread implements Figura {
         this.velocidad[Y] = temperatura/500000.0;
         this.paredes = paredes;
         this.radio = radio;
+        gas=g;
     }
 
     // Lo sobreescribimos de la interfaz figura, lo implementamos
     // para que una molecula en forma de círculo sea pintada.
     @Override
     public void pintar(Graphics grafico){
-        grafico.setColor(Color.RED);
+        grafico.setColor(cambiarColor());
         grafico.fillOval((int)posicion[X], (int)posicion[Y] , (int)radio, (int)radio);
+        grafico.setColor(Color.BLACK);
+        grafico.drawOval((int)posicion[X], (int)posicion[Y] , (int)radio, (int)radio);
     }
 
     // Esta funcion hace que se ejecute un nuevo hilo.
@@ -79,7 +82,7 @@ public class Molecula extends Thread implements Figura {
      * además verifica colisiones.
      */
     public void actualizarVelocidad(){
-
+       
         // Verificacion de colisiones con las paredes.
         if((paredes[ARRIBA] > posicion[Y] - radio)){            
             if(velocidad[Y] == 0) velocidad[Y] = 100;
@@ -108,11 +111,37 @@ public class Molecula extends Thread implements Figura {
                 velocidad[X] *= -1;
         } 
 
-        // Actualizamos la velocidad.
+        // Actualizamos la posicion.
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
+        //Actualizamos la magnitud de la velocidad
+        if(velocidad[X]>0)velocidad[X]+=gas.getTemperatura()/500000.0;
+        else velocidad[X]+=gas.getTemperatura()/500000.0*-1.0;
+        if(velocidad[Y]>0)velocidad[Y]+=gas.getTemperatura()/500000.0;
+        else velocidad[Y]+=gas.getTemperatura()/500000.0*-1;
     }
 
+    //Método para cambiar el color de las moléculas en cuestión de su temperatura
+    private Color cambiarColor()
+    {
+        if(gas.getTemperatura()<=260)
+        {
+            return new Color(0,255,255,150);
+        }
+        if(gas.getTemperatura()<=280)
+        {
+            return new Color(0,255,255-(int)(7.75*(gas.getTemperatura()-260)),150);
+        }
+        if(gas.getTemperatura()<=305)
+        {
+        return new Color((int)(100+6.2*(gas.getTemperatura()-280)),255,0,150); 
+        }
+        if(gas.getTemperatura()<=373)
+        {
+        return new Color(255,255-(int)(3.75*(gas.getTemperatura()-305)),0,150); 
+        }
+        return new Color(255,0,0,150);
+    }
     // getter para el vector de velocidad.
     public double[] getVelocidad(){
         return this.velocidad;

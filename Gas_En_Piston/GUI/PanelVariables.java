@@ -51,7 +51,6 @@ public class PanelVariables extends JPanel{
                 
         gas= ventanaDibujo.getGas();
         piston= ventanaDibujo.getPiston();
-        lienzo=ventanaDibujo;
         inicializar();
 
         setLayout(new GridLayout(0, 1));
@@ -67,6 +66,7 @@ public class PanelVariables extends JPanel{
         add(new JLabel("--Volumen (L)--[1, 50]"));
         add(variables[Constantes.VOLUMEN]);
         add(impresionVariables[Constantes.VOLUMEN]);
+        add(new JLabel("CICLOS:"));
         add(listadoCiclos);
         add(new JLabel("Elaborado por:"));
         add(new JLabel("Manuel Eduardo Gortarez Blanco"));
@@ -268,7 +268,7 @@ public class PanelVariables extends JPanel{
 
         //Creamos la seccion de ciclos
         listadoCiclos= new JComboBox<>(ciclos);
-        listadoCiclos.setSelectedItem(ciclos[2]);
+        listadoCiclos.setSelectedItem(ciclos[0]);
         //Comenzamos el manejador de ciclos, que estara pendiente
         //De cuando se desee realizar uno
         manCiclos=new ManejadorCiclos();
@@ -314,102 +314,110 @@ class ManejadorCiclos extends Thread
     public void run()
     {
         String seleccionado= listadoCiclos.getSelectedItem().toString();
-        if(seleccionado=="------") return;
-        else
+        while(true)
         {
-            //Intentamos leer el archivo
-            try
+            seleccionado= listadoCiclos.getSelectedItem().toString();
+            try{
+            Thread.sleep(30);
+            }catch(InterruptedException ie)
             {
-                lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
-            }catch(IOException ioe)
-            {
-                System.out.println("Error al leer el archivo "+ioe);
+
             }
-            int iEstado=0;
-            Estado estadoActual= lector.getEstados().get(iEstado);
-            Estado estadoAnterior;
-            gas.setVariables(estadoActual.getPresion(), estadoActual.getVolumen(), estadoActual.getTemperatura());
-            //Colocar el estado inicial en el gas y en el panel
-            variables[Constantes.PRESION].removeChangeListener(escPresion);
-            variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
-            variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
-            variables[Constantes.PRESION].setValue((int)(100*estadoActual.getPresion()));
-            variables[Constantes.VOLUMEN].setValue((int)(100*estadoActual.getVolumen()));
-            variables[Constantes.TEMPERATURA].setValue((int)(100*estadoActual.getTemperatura()));
-            variables[Constantes.PRESION].addChangeListener(escPresion);
-            variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
-            variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
-            presion=estadoActual.getPresion();
-            volumen=estadoActual.getVolumen();
-            temperatura=estadoActual.getTemperatura();
-            System.out.println(""+variables[Constantes.PRESION].getValue()+variables[Constantes.VOLUMEN].getValue()+variables[Constantes.TEMPERATURA].getValue());
-            boolean cicloActivo=true;
-            while(cicloActivo)
+            if(seleccionado=="------") continue;
+            else
             {
-                if(listadoCiclos.getSelectedItem()=="------") return;
-                estadoAnterior=estadoActual;
-                iEstado=++iEstado%4;
-                System.out.println(iEstado);
-                estadoActual=lector.getEstados().get(iEstado);
-                listaDeProcesos.setSelectedItem(estadoActual.getTipoDeProceso());
-                System.out.println(listaDeProcesos.getSelectedItem());
-                System.out.println(estadoActual.getVariableModificada());
-                switch(estadoActual.getVariableModificada())
+                //Intentamos leer el archivo
+                try
                 {
-                    case Gas.PRESION:
-                        double cambioPresion=estadoActual.getPresion()-estadoAnterior.getPresion();
-                        for(int i=0;i<60;i++)
-                        {
-                            variables[Constantes.PRESION].setValue((int)(variables[Constantes.PRESION].getValue()+cambioPresion*1.666666));
-                            System.out.println("Presion modificada: "+variables[Constantes.PRESION].getValue());
-                            lienzo.repaint();
-                            try
-                            {
-                                Thread.sleep(16);
-                            }catch(InterruptedException ie)
-                            {
-                                System.out.println("Error: "+ie);
-                            }
-                        }
-                        
-                    break;
-
-                    case Gas.TEMPERATURA:
-                        double cambioTemperatura= estadoActual.getTemperatura()-estadoAnterior.getTemperatura();
-                        for(int i=0;i<60;i++)
-                        {
-                            variables[Constantes.TEMPERATURA].setValue((int)(variables[Constantes.TEMPERATURA].getValue()+cambioTemperatura*1.666666));
-                            System.out.println("Temperatura modificada: "+variables[Constantes.TEMPERATURA].getValue()); 
-                            lienzo.repaint();
-                            try
-                            {
-                                Thread.sleep(16);
-                            }catch(InterruptedException ie)
-                            {
-                                System.out.println("Error: "+ie);
-                            }
-                        }
-                    break;
-
-                    case Gas.VOLUMEN:
-                        double cambioVolumen=estadoActual.getVolumen()-estadoAnterior.getVolumen();
-                        for(int i=0;i<60;i++)
-                        {
-                            variables[Constantes.VOLUMEN].setValue((int)(variables[Constantes.VOLUMEN].getValue()+cambioVolumen*1.666666));
-                            System.out.println("Volumen modificado: "+variables[Constantes.VOLUMEN].getValue());
-                            lienzo.repaint();
-                            try
-                            {
-                                Thread.sleep(16);
-                            }catch(InterruptedException ie)
-                            {
-                                System.out.println("Error: "+ie);
-                            }
-                        }
-                        break;
+                    lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
+                }catch(IOException ioe)
+                {
+                    System.out.println("Error al leer el archivo "+ioe);
                 }
-            }
+                int iEstado=0;
+                Estado estadoActual= lector.getEstados().get(iEstado);
+                Estado estadoAnterior;
+                gas.setVariables(estadoActual.getPresion(), estadoActual.getVolumen(), estadoActual.getTemperatura());
+                //Colocar el estado inicial en el gas y en el panel
+                variables[Constantes.PRESION].removeChangeListener(escPresion);
+                variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                variables[Constantes.PRESION].setValue((int)(100*estadoActual.getPresion()));
+                variables[Constantes.VOLUMEN].setValue((int)(100*estadoActual.getVolumen()));
+                variables[Constantes.TEMPERATURA].setValue((int)(100*estadoActual.getTemperatura()));
+                variables[Constantes.PRESION].addChangeListener(escPresion);
+                variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                presion=estadoActual.getPresion();
+                volumen=estadoActual.getVolumen();
+                temperatura=estadoActual.getTemperatura();
+                System.out.println(""+variables[Constantes.PRESION].getValue()+variables[Constantes.VOLUMEN].getValue()+variables[Constantes.TEMPERATURA].getValue());
+                boolean cicloActivo=true;
+                while(cicloActivo)
+                {
+                    estadoAnterior=estadoActual;
+                    iEstado=++iEstado%4;
+                    System.out.println(iEstado);
+                    estadoActual=lector.getEstados().get(iEstado);
+                    listaDeProcesos.setSelectedItem(estadoActual.getTipoDeProceso());
+                    System.out.println(listaDeProcesos.getSelectedItem());
+                    System.out.println(estadoActual.getVariableModificada());
+                    switch(estadoActual.getVariableModificada())
+                    {
+                        case Gas.PRESION:
+                            double cambioPresion=estadoActual.getPresion()-estadoAnterior.getPresion();
+                            for(int i=0;i<60;i++)
+                            {
+                                variables[Constantes.PRESION].setValue((int)(variables[Constantes.PRESION].getValue()+cambioPresion*1.666666));
+                                System.out.println("Presion modificada: "+variables[Constantes.PRESION].getValue());
+                                try
+                                {
+                                    Thread.sleep(16);
+                                }catch(InterruptedException ie)
+                                {
+                                    System.out.println("Error: "+ie);
+                                }
+                            }
+                            
+                        break;
+
+                        case Gas.TEMPERATURA:
+                            double cambioTemperatura= estadoActual.getTemperatura()-estadoAnterior.getTemperatura();
+                            for(int i=0;i<60;i++)
+                            {
+                                variables[Constantes.TEMPERATURA].setValue((int)(variables[Constantes.TEMPERATURA].getValue()+cambioTemperatura*1.666666));
+                                System.out.println("Temperatura modificada: "+variables[Constantes.TEMPERATURA].getValue()); 
+                                try
+                                {
+                                    Thread.sleep(16);
+                                }catch(InterruptedException ie)
+                                {
+                                    System.out.println("Error: "+ie);
+                                }
+                            }
+                        break;
+
+                        case Gas.VOLUMEN:
+                            double cambioVolumen=estadoActual.getVolumen()-estadoAnterior.getVolumen();
+                            for(int i=0;i<60;i++)
+                            {
+                                variables[Constantes.VOLUMEN].setValue((int)(variables[Constantes.VOLUMEN].getValue()+cambioVolumen*1.666666));
+                                System.out.println("Volumen modificado: "+variables[Constantes.VOLUMEN].getValue());
+                                try
+                                {
+                                    Thread.sleep(16);
+                                }catch(InterruptedException ie)
+                                {
+                                    System.out.println("Error: "+ie);
+                                }
+                            }
+                            break;
+                        }
+                        if(listadoCiclos.getSelectedItem()=="------") cicloActivo=false;
+                    }
+                }
         }
+
     }
 }
 }

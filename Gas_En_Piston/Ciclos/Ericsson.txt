@@ -1,6 +1,7 @@
+
 Tipo de proceso = Isobarico
 Temperatura = 273
-Volumen 22.12
+Volumen = 22.12
 Presion = 1.01
 Variable Modificada = 2  
 Tipo de proceso = Isotermico
