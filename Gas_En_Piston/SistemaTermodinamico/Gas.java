@@ -60,7 +60,7 @@ public class Gas extends Thread implements GUI.Figura
      * cambiarColor() crea un nuevo color en base a la temperatura, para que al pintar el gas
      * se tenga una mejor representación de la misma.
      */
-    public GradientPaint cambiarColor()
+    private GradientPaint cambiarColor()
     {
         if(temperatura<=260)
         {
