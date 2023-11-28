@@ -24,6 +24,13 @@ public class Molecula extends Thread implements Figura {
     // Tamaño de la molecula
     private double radio;
 
+    // Temperatura del sistema
+    private double temperatura = 273;
+    private double temperaturaaux;
+
+    // Para normalizar el vector de velocidad
+    private double escalarNormalizador;
+
     // Coordenadas de las paredes del contenedor.
     private double paredes[];
 
@@ -41,21 +48,20 @@ public class Molecula extends Thread implements Figura {
     private final int DERECHA = 1;
     private final int ABAJO = 2;
     private final int IZQUIERDA = 3;
-    private Gas gas;
+ 
     // Panel en donde pintamos las moléculas.
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
-    public Molecula(Point posicion, double radio, Double temperatura, double[] paredes,VentanaDibujo panel,Gas g) {
+    public Molecula(Point posicion, double radio, double[] paredes,VentanaDibujo panel) {
             
         this.panel = panel;
         this.posicion[X] = posicion.getX();
         this.posicion[Y] = posicion.getY();
-        this.velocidad[X] = temperatura/500000.0;
-        this.velocidad[Y] = temperatura/500000.0;
+        this.velocidad[X] = 1;
+        this.velocidad[Y] = 1;
         this.paredes = paredes;
         this.radio = radio;
-        gas=g;
     }
 
     // Lo sobreescribimos de la interfaz figura, lo implementamos
@@ -74,6 +80,11 @@ public class Molecula extends Thread implements Figura {
         while(true){
             panel.repaint();
             actualizarVelocidad();
+            try{
+                sleep(16); // Simulamos 60 fps -> (1000 / 60)
+            }catch(InterruptedException ie){
+                System.out.println("Error:" + ie);
+            }
         }
     } 
     
@@ -82,7 +93,28 @@ public class Molecula extends Thread implements Figura {
      * además verifica colisiones.
      */
     public void actualizarVelocidad(){
-       
+
+        temperaturaaux = temperatura / 100.00; // [.35 - 60]
+        System.out.println("temperatura: " + temperatura);
+        System.out.println("temperaturaaux: " + temperaturaaux);
+
+        System.out.println("X1: " + velocidad[X]);
+        System.out.println("Y1: " + velocidad[Y]);
+        
+        // Normalizando el vector de velocidad
+        escalarNormalizador = Math.sqrt(Math.pow(velocidad[X], 2.0) + Math.pow(velocidad[Y], 2.0));
+        System.out.println("Norma: " + escalarNormalizador);
+
+        velocidad[X] /= escalarNormalizador;
+        velocidad[Y] /= escalarNormalizador;
+
+        // Ajustamos la magnitud del vector de velocidad en funcion de temperatura.
+        velocidad[X] *= temperaturaaux;
+        velocidad[Y] *= temperaturaaux;        
+
+        System.out.println("X: " + velocidad[X]);
+        System.out.println("Y: " + velocidad[Y]);
+        
         // Verificacion de colisiones con las paredes.
         if((paredes[ARRIBA] > posicion[Y] - radio)){            
             if(velocidad[Y] == 0) velocidad[Y] = 100;
@@ -114,34 +146,29 @@ public class Molecula extends Thread implements Figura {
         // Actualizamos la posicion.
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
-        //Actualizamos la magnitud de la velocidad
-        if(velocidad[X]>0)velocidad[X]+=gas.getTemperatura()/500000.0;
-        else velocidad[X]+=gas.getTemperatura()/500000.0*-1.0;
-        if(velocidad[Y]>0)velocidad[Y]+=gas.getTemperatura()/500000.0;
-        else velocidad[Y]+=gas.getTemperatura()/500000.0*-1;
     }
 
     //Método para cambiar el color de las moléculas en cuestión de su temperatura
-    private Color cambiarColor()
-    {
-        if(gas.getTemperatura()<=260)
+    private Color cambiarColor(){
+        if(temperatura<=260)
         {
             return new Color(0,255,255,150);
         }
-        if(gas.getTemperatura()<=280)
+        if(temperatura<=280)
         {
-            return new Color(0,255,255-(int)(7.75*(gas.getTemperatura()-260)),150);
+            return new Color(0,255,255-(int)(7.75*(temperatura-260)),150);
         }
-        if(gas.getTemperatura()<=305)
+        if(temperatura<=305)
         {
-        return new Color((int)(100+6.2*(gas.getTemperatura()-280)),255,0,150); 
+            return new Color((int)(100+6.2*(temperatura-280)),255,0,150); 
         }
-        if(gas.getTemperatura()<=373)
+        if(temperatura<=373)
         {
-        return new Color(255,255-(int)(3.75*(gas.getTemperatura()-305)),0,150); 
+            return new Color(255,255-(int)(3.75*(temperatura-305)),0,150); 
         }
         return new Color(255,0,0,150);
     }
+    
     // getter para el vector de velocidad.
     public double[] getVelocidad(){
         return this.velocidad;
@@ -153,12 +180,19 @@ public class Molecula extends Thread implements Figura {
         this.velocidad[Y] = Vy;
     }
 
+    // getter para el radio
     public double getRadio(){
         return this.radio;
     }
 
+    // getter para la posición
     public Point2D.Double getPosicion(){
         return new Point2D.Double(posicion[X], posicion[Y]);
+    }
+
+    // setter para la temperatura.
+    public void setTemperatura(double temperatura){
+        this.temperatura = temperatura;
     }
 }
 

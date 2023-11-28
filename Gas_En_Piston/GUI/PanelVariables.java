@@ -16,6 +16,7 @@ import Ciclos.Estado;
 import Ciclos.Lector;
 import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
+import SistemaTermodinamico.Molecula;
 
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -45,12 +46,15 @@ public class PanelVariables extends JPanel{
     private VentanaDibujo lienzo;
     private Lector lector;
     private ManejadorCiclos manCiclos;
+
+    private Molecula[] moleculas;
     // Constructor del panel de variables.
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
                 
         gas= ventanaDibujo.getGas();
         piston= ventanaDibujo.getPiston();
+        moleculas = ventanaDibujo.getMoleculas();
         inicializar();
 
         setLayout(new GridLayout(0, 1));
@@ -138,7 +142,10 @@ public class PanelVariables extends JPanel{
                 variables[Constantes.PRESION].setValue((int)(presion*100.0));
                 impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
                 variables[Constantes.PRESION].addChangeListener(escPresion);
-            } 
+            }
+
+            for(Molecula molecula: moleculas)
+                molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);                
         }
     }
     class EscuchadorVolumen implements ChangeListener

@@ -28,17 +28,16 @@ public class VentanaDibujo extends JPanel
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
         this.piston= new Piston(new Point(50,100), new Point(700,750), 22.27, this,20);
         moleculas = new Molecula[10];
-        moleculas[0] = new Molecula(new Point(300, 600), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[1] = new Molecula(new Point(350, 600), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[2] = new Molecula(new Point(250, 600), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[3] = new Molecula(new Point(400, 600), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[4] = new Molecula(new Point(200, 600), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[5] = new Molecula(new Point(300, 650), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[6] = new Molecula(new Point(350, 650), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[7] = new Molecula(new Point(250, 650), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[8] = new Molecula(new Point(400, 650), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        moleculas[9] = new Molecula(new Point(200, 650), 10, gas.getTemperatura(), piston.getParedes(),this,gas);
-        
+        moleculas[0] = new Molecula(new Point(300, 600), 10, piston.getParedes(), this);
+        moleculas[1] = new Molecula(new Point(350, 600), 10, piston.getParedes(), this);
+        moleculas[2] = new Molecula(new Point(250, 600), 10, piston.getParedes(), this);
+        moleculas[3] = new Molecula(new Point(400, 600), 10, piston.getParedes(), this);
+        moleculas[4] = new Molecula(new Point(200, 600), 10, piston.getParedes(), this);
+        moleculas[5] = new Molecula(new Point(300, 650), 10, piston.getParedes(), this);
+        moleculas[6] = new Molecula(new Point(350, 650), 10, piston.getParedes(), this);
+        moleculas[7] = new Molecula(new Point(250, 650), 10, piston.getParedes(), this);
+        moleculas[8] = new Molecula(new Point(400, 650), 10, piston.getParedes(), this);
+        moleculas[9] = new Molecula(new Point(200, 650), 10, piston.getParedes(), this);        
 
         colision = new Colision(moleculas);
 
@@ -46,8 +45,7 @@ public class VentanaDibujo extends JPanel
         piston.start();
         for(Molecula molecula: moleculas)
             molecula.start();
-        colision.start();
-        
+        colision.start();        
       
         setPreferredSize(new Dimension(700, 700));
     }
@@ -76,5 +74,9 @@ public class VentanaDibujo extends JPanel
 
     public Piston getPiston(){
         return this.piston;
+    }
+
+    public Molecula[] getMoleculas(){
+        return this.moleculas;
     }
 }
