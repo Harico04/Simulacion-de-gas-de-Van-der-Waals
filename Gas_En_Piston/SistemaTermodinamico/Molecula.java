@@ -115,10 +115,10 @@ public class Molecula extends Thread implements Figura {
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
         //Actualizamos la magnitud de la velocidad
-        if(velocidad[X]>0)velocidad[X]+=gas.getTemperatura()/500000.0;
-        else velocidad[X]+=gas.getTemperatura()/500000.0*-1.0;
-        if(velocidad[Y]>0)velocidad[Y]+=gas.getTemperatura()/500000.0;
-        else velocidad[Y]+=gas.getTemperatura()/500000.0*-1;
+        if(velocidad[X]>0)velocidad[X]=gas.getTemperatura()/500000.0;
+        else velocidad[X]=gas.getTemperatura()/500000.0*-1.0;
+        if(velocidad[Y]>0)velocidad[Y]=gas.getTemperatura()/500000.0;
+        else velocidad[Y]=gas.getTemperatura()/500000.0*-1;
     }
 
     //Método para cambiar el color de las moléculas en cuestión de su temperatura
