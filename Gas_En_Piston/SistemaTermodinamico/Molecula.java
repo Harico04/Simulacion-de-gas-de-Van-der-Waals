@@ -95,15 +95,9 @@ public class Molecula extends Thread implements Figura {
     public void actualizarVelocidad(){
 
         temperaturaaux = temperatura / 100.00; // [.35 - 60]
-        System.out.println("temperatura: " + temperatura);
-        System.out.println("temperaturaaux: " + temperaturaaux);
-
-        System.out.println("X1: " + velocidad[X]);
-        System.out.println("Y1: " + velocidad[Y]);
         
         // Normalizando el vector de velocidad
         escalarNormalizador = Math.sqrt(Math.pow(velocidad[X], 2.0) + Math.pow(velocidad[Y], 2.0));
-        System.out.println("Norma: " + escalarNormalizador);
 
         velocidad[X] /= escalarNormalizador;
         velocidad[Y] /= escalarNormalizador;
@@ -111,9 +105,6 @@ public class Molecula extends Thread implements Figura {
         // Ajustamos la magnitud del vector de velocidad en funcion de temperatura.
         velocidad[X] *= temperaturaaux;
         velocidad[Y] *= temperaturaaux;        
-
-        System.out.println("X: " + velocidad[X]);
-        System.out.println("Y: " + velocidad[Y]);
         
         // Verificacion de colisiones con las paredes.
         if((paredes[ARRIBA] > posicion[Y] - radio)){            
@@ -121,9 +112,15 @@ public class Molecula extends Thread implements Figura {
             if(velocidad[Y] * (-1) > 0)
                 velocidad[Y] *= -1;
         }
-
+        //Verificar que las moleculas no se hayan salido del contenedor
         if(posicion[Y] < paredes[ARRIBA] - radio)
-            posicion[Y] = paredes[ARRIBA] + 2*radio;            
+            posicion[Y] = paredes[ARRIBA] + 2*radio;
+        if(posicion[Y] > paredes[ABAJO] + radio)
+            posicion[Y] = paredes[ABAJO] - 2*radio;                
+        if(posicion[X] < paredes[IZQUIERDA] - radio)
+            posicion[X] = paredes[IZQUIERDA] + 2*radio;    
+        if(posicion[X] > paredes[DERECHA] + radio)
+            posicion[X] = paredes[DERECHA] - 2*radio;   
 
         if(paredes[ABAJO] < posicion[Y] + radio){
             if(velocidad[Y] == 0) velocidad[Y] = -100;
@@ -146,26 +143,15 @@ public class Molecula extends Thread implements Figura {
         // Actualizamos la posicion.
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
+
     }
 
     //Método para cambiar el color de las moléculas en cuestión de su temperatura
     private Color cambiarColor(){
-        if(temperatura<=260)
-        {
-            return new Color(0,255,255,150);
-        }
-        if(temperatura<=280)
-        {
-            return new Color(0,255,255-(int)(7.75*(temperatura-260)),150);
-        }
-        if(temperatura<=305)
-        {
-            return new Color((int)(100+6.2*(temperatura-280)),255,0,150); 
-        }
-        if(temperatura<=373)
-        {
-            return new Color(255,255-(int)(3.75*(temperatura-305)),0,150); 
-        }
+        if(temperatura<=260) return new Color(0,255,255,150);
+        if(temperatura<=280) return new Color(0,255,255-(int)(7.75*(temperatura-260)),150);
+        if(temperatura<=305) return new Color((int)(100+6.2*(temperatura-280)),255,0,150); 
+        if(temperatura<=373) return new Color(255,255-(int)(3.75*(temperatura-305)),0,150); 
         return new Color(255,0,0,150);
     }
     

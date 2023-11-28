@@ -99,6 +99,8 @@ public class PanelVariables extends JPanel{
                         variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
                         impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
                         variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                        for(Molecula molecula: moleculas)
+                            molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);
                     } 
                     else
                     {
@@ -180,6 +182,8 @@ public class PanelVariables extends JPanel{
                 variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
                 impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
                 variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                for(Molecula molecula: moleculas)
+                molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);
             } 
         }
     }
@@ -242,6 +246,7 @@ public class PanelVariables extends JPanel{
         variables[Constantes.TEMPERATURA].setPaintTicks(true);
         variables[Constantes.TEMPERATURA].setPaintLabels(false);
         variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+        variables[Constantes.TEMPERATURA].setEnabled(false);
         impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
 
 

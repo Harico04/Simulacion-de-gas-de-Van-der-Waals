@@ -22,6 +22,7 @@ public class Colision extends Thread{
     public void run(){
         while(true){
             Colisiones();
+ 
         }
     }
     
@@ -32,9 +33,7 @@ public class Colision extends Thread{
             for(Molecula molecula2: moleculas){
                 if(molecula1 == molecula2)
                     continue;
-                if (!verificarColision(molecula1, molecula2))
-                    continue;
-                modificarVelocidad(molecula1, molecula2);
+                if (verificarColision(molecula1, molecula2)) modificarVelocidad(molecula1, molecula2);
             }
         }
     }
@@ -86,7 +85,6 @@ public class Colision extends Thread{
         // Asignamos las velocidades actualizadas a las moleculas
         molecula1.setVelocidad(v1_f[X], v1_f[Y]);
         molecula2.setVelocidad(v2_f[X], v2_f[Y]);
-        
     }
 
     private double productoPunto(double[] v1,  double [] v2){

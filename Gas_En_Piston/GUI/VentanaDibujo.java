@@ -27,18 +27,16 @@ public class VentanaDibujo extends JPanel
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
         this.piston= new Piston(new Point(50,100), new Point(700,750), 22.27, this,20);
-        moleculas = new Molecula[10];
-        moleculas[0] = new Molecula(new Point(300, 600), 10, piston.getParedes(), this);
-        moleculas[1] = new Molecula(new Point(350, 600), 10, piston.getParedes(), this);
-        moleculas[2] = new Molecula(new Point(250, 600), 10, piston.getParedes(), this);
-        moleculas[3] = new Molecula(new Point(400, 600), 10, piston.getParedes(), this);
-        moleculas[4] = new Molecula(new Point(200, 600), 10, piston.getParedes(), this);
-        moleculas[5] = new Molecula(new Point(300, 650), 10, piston.getParedes(), this);
-        moleculas[6] = new Molecula(new Point(350, 650), 10, piston.getParedes(), this);
-        moleculas[7] = new Molecula(new Point(250, 650), 10, piston.getParedes(), this);
-        moleculas[8] = new Molecula(new Point(400, 650), 10, piston.getParedes(), this);
-        moleculas[9] = new Molecula(new Point(200, 650), 10, piston.getParedes(), this);        
-
+        moleculas = new Molecula[30];
+        int indiceAux=0;
+        for(int i=0;i<5;i++)
+        {
+            for(int j=0;j<6;j++)
+            {
+                moleculas[indiceAux]=new Molecula(new Point(250+30*j, 600+30*i), 10, piston.getParedes(), this);
+                indiceAux++;
+            }
+        }          
         colision = new Colision(moleculas);
 
         gas.start();
