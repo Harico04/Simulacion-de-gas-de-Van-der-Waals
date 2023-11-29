@@ -1,3 +1,7 @@
+/**
+ *Una implementacion de WindowAdapter que permite manejar de forma
+ *sencilla, hilos que se encuentren dentro de la ventana
+ * */
 package Escuchadores;
 
 import java.awt.event.WindowAdapter;

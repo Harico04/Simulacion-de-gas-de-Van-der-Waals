@@ -341,7 +341,7 @@ class ManejadorCiclos extends Thread
                 //Intentamos leer el archivo
                 try
                 {
-                    lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
+                    lector=new Lector("Gas_En_Piston/Ciclos/"+listadoCiclos.getSelectedItem().toString()+".txt");
                 }catch(IOException ioe)
                 {
                     System.out.println("Error al leer el archivo "+ioe);

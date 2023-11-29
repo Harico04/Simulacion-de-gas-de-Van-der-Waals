@@ -1,4 +1,6 @@
-
+/**
+ * Lee de un archivo de texto para guardar los datos dentro de un arreglo de estados
+ */
 package Ciclos;
 
 import java.io.BufferedReader;
