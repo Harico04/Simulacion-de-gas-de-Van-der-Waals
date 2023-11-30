@@ -64,7 +64,6 @@ public class Piston extends Thread implements GUI.Figura
      * Puntos y rectángulos utilizados para la representación gráfica del pistón y sus componentes.
      */
     private Point c1, c2, p1, p2;
-    private Rectangle piston, pA, pD, pI;
 
     /**
      * Coordenadas utilizadas para almacenar las posiciones de las paredes del pistón.
