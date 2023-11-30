@@ -1,5 +1,4 @@
-
-package Ciclos;
+package ciclos;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,7 +10,7 @@ import java.util.StringTokenizer;
 /**
  * Clase que lee y almacena informacion desde archivos de texto para la creacion de estados
  * termodinamicos
- *
+ * @author Alan Torres
  * */
 public class Lector {
     private FileReader fr;

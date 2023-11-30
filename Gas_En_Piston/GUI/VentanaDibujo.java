@@ -9,13 +9,14 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
-import SistemaTermodinamico.Molecula;
-import SistemaTermodinamico.Gas;
-import SistemaTermodinamico.Piston;
-import SistemaTermodinamico.Colision;
+import sistemaTermodinamico.Molecula;
+import sistemaTermodinamico.Gas;
+import sistemaTermodinamico.Piston;
+import sistemaTermodinamico.Colision;
 
 /**
  * JPanel en el cual se muestran las figuras dibujadas para la representacion grafica de la simulacion
+ * @author Fausto Medina
  */
 public class VentanaDibujo extends JPanel
 {

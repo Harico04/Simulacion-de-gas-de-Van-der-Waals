@@ -1,16 +1,19 @@
-/*
- * Ejecucion de la simulacion de gas
- * Elaborado por Fausto Medina, Manuel Gortarez y Alan Torres
- * A 29 de Noviembre de 2023
- */
+
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import Escuchadores.EscuchadorVentana;
+import escuchadores.EscuchadorVentana;
 import GUI.PanelVariables;
 import GUI.VentanaDibujo;   
 
+/**
+ * Ejecucion de la simulacion de gas
+ * @author Manuel Gortarez
+ * @author Fausto Medina
+ * @author Alan Torres
+ * 
+ */
 public class Principal
 {
     public static void main(String[] args) {
@@ -21,7 +24,9 @@ public class Principal
     //Crea un nuevo JPanel sobre el que se muestran los valores de las variables y los sliders para modificar sus valores, adicionalmente muestra los creditos en la esquina inferior derecha
         PanelVariables panelVariables = new PanelVariables(ventanaDibujo);
     //Establece el layout
-        ven.setLayout(new BorderLayout());
+    ven.setLayout(new BorderLayout());
+    //Agrega el window listener
+        ven.addWindowListener(new EscuchadorVentana());
     //Agrega el panel de dibujo a la ventana
         ven.add(ventanaDibujo, BorderLayout.CENTER);
     //Agrega el panel donde se muestran las variables a la ventana

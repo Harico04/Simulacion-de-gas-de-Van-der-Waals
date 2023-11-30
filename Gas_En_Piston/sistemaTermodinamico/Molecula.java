@@ -1,6 +1,4 @@
-
-
-package SistemaTermodinamico;
+package sistemaTermodinamico;
 
 import GUI.Figura;
 import GUI.VentanaDibujo;
@@ -17,7 +15,7 @@ import java.awt.geom.Point2D;
  * Además tratamos a la clase molecula como un hilo, es decir cada vez
  * que se cree una molécula y se ejecute esta funcionara en un hilo aparte.
  *
- * Autor: Manuel Eduardo Gortarez Blanco.
+ * @author Manuel Gortarez
  */
 public class Molecula extends Thread implements Figura {
 
