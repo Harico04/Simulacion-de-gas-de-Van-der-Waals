@@ -162,7 +162,6 @@ public class Gas extends Thread implements GUI.Figura
         this.presion=p;
         this.volumen=v;
         this.temperatura=T;
-        System.out.println("Valores actuales: "+p+", "+v+", "+T);
     }
     /**
      * Metodo que retorna el valor de la presion
@@ -202,36 +201,30 @@ public class Gas extends Thread implements GUI.Figura
                 if(tipoProceso=="Isometrico")
                 {
                     temperatura=((presion+constante_a/(volumen*volumen))*(volumen-constante_b))/R;
-                    System.out.println("Temperatura calculada: "+temperatura);
                 }
                 else
                 {
                     volumen=aproximarVolumen();
-                    System.out.println("volumen calculado: "+volumen);
                 }
                 break;
             case TEMPERATURA:
                 if(tipoProceso=="Isobarico")
                 {
                     volumen=aproximarVolumen();
-                    System.out.println("volumen calculado: "+volumen);
                 }
                 else
                 {
                     presion=(R*temperatura)/(volumen-constante_b)-constante_a/(volumen*volumen);
-                    System.out.println("presion calculada: "+presion);
                 }
                 break;
             case VOLUMEN:
                 if(tipoProceso=="Isotermico")
                 {
                     presion=(R*temperatura)/(volumen-constante_b)-constante_a/(volumen*volumen);
-                    System.out.println("presion calculada: "+presion);
                 }
                 else
                 {
                     temperatura=((presion+constante_a/(volumen*volumen))*(volumen-constante_b))/R;
-                    System.out.println("Temperatura calculada: "+temperatura);
                 }
                 break;
          }

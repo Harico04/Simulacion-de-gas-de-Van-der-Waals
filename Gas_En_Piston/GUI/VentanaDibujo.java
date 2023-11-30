@@ -34,9 +34,9 @@ public class VentanaDibujo extends JPanel
         this.piston= new Piston(new Point(50,100), new Point(700,750), 22.27, this,20);
         moleculas = new Molecula[30];
         int indiceAux=0;
-        for(int i=0;i<5;i++)
+        for(int i=0;i<6;i++)
         {
-            for(int j=0;j<6;j++)
+            for(int j=0;j<5;j++)
             {
                 moleculas[indiceAux]=new Molecula(new Point(250+30*j, 600+30*i), 10, piston.getParedes(), this);
                 indiceAux++;

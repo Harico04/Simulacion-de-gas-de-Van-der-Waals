@@ -2,13 +2,11 @@
 package Ciclos;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import Ciclos.Estado;
 
 /**
  * Clase que lee y almacena informacion desde archivos de texto para la creacion de estados

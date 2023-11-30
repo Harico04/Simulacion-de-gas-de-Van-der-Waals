@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 /**
  * Representa el piston en un sistema termodinamico cerrado con 
  * un gas. Se expande y contrae en funcion del volumen del sistema
@@ -41,7 +40,6 @@ public class Piston extends Thread implements GUI.Figura
      * Volumen del sistema termodinámico.
      */
     private double volumen;
-
     /**
      * Altura actual del pistón en la representación gráfica.
      */
@@ -87,12 +85,6 @@ public class Piston extends Thread implements GUI.Figura
         this.c2 = c2;
         this.volumen = volumen;
         this.radio = radio;
-        
-        // Inicialización de los rectángulos utilizados para la representación gráfica.
-        piston = new Rectangle((int) c1.getX(), (int) altura_piston, (int) (c2.getX() - c1.getX()), (int) (altura_piston - 20));
-        pI = new Rectangle((int) c1.getX(), (int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
-        pD = new Rectangle((int) c2.getX(), (int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
-        pA = new Rectangle((int) c1.getX(), (int) c2.getY(), (int) (c2.getX() - c1.getX()), 1);
         
         // Cálculo de la escala de pixeles y la altura del pistón.
         escalaPixeles = (int) (c2.getY() - c1.getY()) / 50;
