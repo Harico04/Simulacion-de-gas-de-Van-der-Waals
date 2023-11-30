@@ -1,23 +1,23 @@
 
 Tipo de proceso = Isometrico
-Temperatura = 600
-Volumen = 9.81
-Presion = 5
+Temperatura = 450
+Volumen = 10.26
+Presion = 3.59
 Variable Modificada = 0
 Tipo de proceso = Isotermico
-Temperatura = 600
-Volumen = 12.84
-Presion = 3.82
+Temperatura = 450
+Volumen = 18
+Presion = 2.05
 Variable Modificada = 1
 Tipo de proceso = Isometrico
-Temperatura = 405
-Volumen = 12.84
-Presion = 2.58
+Temperatura = 219.18
+Volumen = 18
+Presion = 1
 Variable Modificada = 0
 Tipo de proceso = Isotermico
-Temperatura = 405
-Volumen = 9.81
-Presion = 3.36
+Temperatura = 219.18
+Volumen = 10.26
+Presion = 1.75
 Variable Modificada = 1
 
 
