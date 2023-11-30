@@ -1,7 +1,4 @@
-/*
- * JPanel que muestra los valores de las variables termodinamicas, permite 
- * su modificacion y que se fijen. Muestra creditos en la esquina inferior derecha.
- */
+
 
 package GUI;
 
@@ -24,29 +21,115 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 
+/**
+ * JPanel que muestra los valores de las variables termodinamicas, permite 
+ * su modificacion y que se fijen. Muestra creditos en la esquina inferior derecha.
+ */
 public class PanelVariables extends JPanel{
 
     // Declaracion de variables.
+    /**
+     * Arrelo que contiene las variables a imprimir
+     * */
     private JLabel impresionVariables[];
+  /**
+   * Arreglo que contiene las variables a modificar
+   * */
     private JSlider variables[];
+  /**
+   * Arreglo que contiene los procesos que se pueden dar en el piston
+   * */
     private String procesos[] = { "Isotermico", "Isobarico", "Isometrico" },ciclos[]={"------","Ericsson","Stirling"};
+    /**
+     * Lista que despliega los procesos 
+     * */
     private JComboBox<String> listaDeProcesos;
+  /**
+   * Lista que despliega los ciclos disponibles que se pueden ejecutar
+   * */
     private JComboBox<String> listadoCiclos;
+  /**
+   * Temperatura del gas
+   * */
     private double temperatura;
+  /**
+   * Presion del gas
+   * */
     private double presion;
+  /**
+   * Volumen del gas
+   * */
     private double volumen;
+  /**
+   * Gas del sistema termodinamico
+   * */
     private Gas gas;
+  /**
+   * Piston que representa las paredes del sistema
+   * */
     private Piston piston;
+  /**
+   *Escuchador para la presion 
+   * */
     EscuchadorPresion escPresion;
+  /**
+   *Escuchador de la temperatura
+   * */
     EscuchadorTemperatura escTemperatura;
+  /**
+   *Escuchador del volumen
+   * */
     EscuchadorVolumen escVolumen;
-    private final double P_MAX=5,V_MAX=50,T_MAX=600;
-    private final double P_MIN=1,V_MIN=2,T_MIN=135;
+  /**
+   * Valor máximo permitido para la presión en el estado, 
+   */
+  private final double P_MAX = 5;
+
+  /**
+   * Valor máximo permitido para el volumen en el estado, 
+   */
+  private final double V_MAX = 50;
+
+  /**
+   * Valor máximo permitido para la temperatura en el estado.
+   */
+  private final double T_MAX = 600;
+
+  /**
+   * Valor mínimo permitido para la presión en el estado, 
+   */
+  private final double P_MIN = 1;
+
+  /**
+   * Valor mínimo permitido para el volumen en el estado, 
+   */
+  private final double V_MIN = 2;
+
+  /**
+   * Valor mínimo permitido para la temperatura en el estado.
+   */
+  private final double T_MIN = 135;
+  /**
+   * Lienzo sobre el que se pinta la representacion grafica del sistema
+   * */
+    private VentanaDibujo lienzo;
+  /**
+   * Lector que lee el archivo y almacena sus valores para generar ciclos
     private Lector lector;
+  /**
+   * Manejador de ciclos del sistema
+   * */
     private ManejadorCiclos manCiclos;
 
+    /**
+     * Arreglo de moleculas 
+     * */
     private Molecula[] moleculas;
     // Constructor del panel de variables.
+    /**
+     * Constructor del panel de variables
+     * @param ventanaDibujo Panel sobre el cual se va a dibujar la representacion grafica del sistema
+     * */
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
                 
@@ -74,7 +157,7 @@ public class PanelVariables extends JPanel{
         add(new JLabel("Manuel Eduardo Gortarez Blanco"));
         add(new JLabel("Fausto Misael Medina Lugo"));
         add(new JLabel("Alan David Torres Flores"));
-    }
+
     //Escuchador para el JSlider de presion
     class EscuchadorPresion implements ChangeListener
     {
@@ -163,7 +246,7 @@ public class PanelVariables extends JPanel{
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
             } 
         }
-    }
+
     //Escuchador para el JSLider de temperatura
     class EscuchadorTemperatura implements ChangeListener
     {
@@ -250,7 +333,7 @@ public class PanelVariables extends JPanel{
             for(Molecula molecula: moleculas)
                 molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);                
         }
-    }
+
     //Escuchador para el JSlider de volumen
     class EscuchadorVolumen implements ChangeListener
     {
@@ -346,6 +429,9 @@ public class PanelVariables extends JPanel{
         }
     }
     // Se inicializan las variables.
+     /**
+      *Metodo para inicializar variables
+      * */
     protected void inicializar(){
 
         impresionVariables = new JLabel[Constantes.CANTIDAD_VARIABLES];
@@ -450,35 +536,63 @@ public class PanelVariables extends JPanel{
     // 0 para proceso isotérmico
     // 1 para proceso isobárico
     // 2 para proceso isométrico
+    /**
+     * Metodo que determina cual proceso fue seleccionado
+     * 0 para Isotermico
+     * 1 para Isobarico
+     * 2 para Isometrico
+     * @return El tipo de proceso seleccionado
+     * */
     public int cualProceso(){
         return listaDeProcesos.getSelectedIndex();
     }
 
     // getters y setter de las variables del sistema.
+    /**
+     *Retorna el valor de la temperatura mostrada en el panel
+     *@return Valor de la temperatura mostrada en el panel
+     * */
     public float getTemperaturaPanel() {
         return variables[Constantes.TEMPERATURA].getValue()/100.f; //volvemos a la escala normal.
     }
-    
+    /**
+     * Retorna el valor de la presion mostrada en el panel
+     * @return Presion mostrada en el panel
+     * */ 
     public float getPresionPanel() {
         return variables[Constantes.PRESION].getValue()/100.f;
     }
-    
+    /**
+     *Retorna el valor del volumen mostrado
+     *@return Volumen mostrado en el panel
+     * */ 
     public float getVolumenPanel() {
         return variables[Constantes.TEMPERATURA].getValue()/100.f;
     }
-
+    /**
+     *Establece un nuevo valor para la temperatura mostrada en el panel
+     *@param temperatura Nuevo valor de la temperatura
+     * */
     public void setTemperaturaPanel(int temperatura){
         variables[Constantes.TEMPERATURA].setValue(temperatura*100);
     }
-
+    /**
+     * Establece un nuevo valor para la presion mostrada en el panel
+     * @param presion Nuevo valor de la presion
+     * */
     public void setPresionPanel(int presion){
         variables[Constantes.PRESION].setValue(presion*100);
     }
-
+    /**
+     * Establece un nuevo valor de la temperatura mostrada en el panel
+     * @param volumen Nuevo valor del volumen
+     * */
     public void setVolumenPanel(int volumen){
         variables[Constantes.VOLUMEN].setValue(volumen*100);
     }
-
+/**
+ * Clase encargada de manejar los ciclos en el sistema termodinamico
+ * */
 class ManejadorCiclos extends Thread
 {
     public void run()
@@ -499,7 +613,7 @@ class ManejadorCiclos extends Thread
                 //Intentamos leer el archivo
                 try
                 {
-                    lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
+                    lector=new Lector("Gas_En_Piston/Ciclos/"+listadoCiclos.getSelectedItem().toString()+".txt");
                 }catch(IOException ioe)
                 {
                     System.out.println("Error al leer el archivo "+ioe);
@@ -588,6 +702,9 @@ class ManejadorCiclos extends Thread
     }
 }
 }
+/**
+ * Clase que contiene constantes para referenciar a ciertas variables
+ * */
 class Constantes{
     
     //Enumeraciones
