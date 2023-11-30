@@ -1,8 +1,4 @@
-/*
- * Representa un gas contenido en un sistema termodinamico cerrado con un piston.
- * Se expande, contrae, enfria, calienta y varia su presion en base a la ecuacion
- * de Van Der Waals.
- */
+
 package SistemaTermodinamico;
 
 import java.awt.Color;
@@ -13,24 +9,94 @@ import java.awt.Point;
 
 import GUI.VentanaDibujo;
 
+/**
+ * Representa un gas contenido en un sistema termodinamico cerrado con un piston.
+ * Se expande, contrae, enfria, calienta y varia su presion en base a la ecuacion
+ * de Van Der Waals.
+ */
 public class Gas extends Thread implements GUI.Figura
 {
+    /**
+     * Constante de los gases
+     * */
     private final double R=0.08206;
+  /**
+   * Constante de interaccion molecular 
+   * */
     private double constante_a;
+  /**
+   * Constante del volumen de las moleculas
+   * */
     private double constante_b;
+  /**
+   * Presion del gas
+   * */
     private double presion;
+  /**
+   * Volumen del gas
+   * */
     private double volumen;
+  /**
+   * Volumen maximo que puede ocupar 
+   * */
     private double V_MAX;
+  /**
+   * Temperatura del gas
+   * */
     private double temperatura;
-    private Point puntoInicio,puntoFinal;
-    public final static int PRESION=0,VOLUMEN=1,TEMPERATURA=2;
+  /**
+   *Punto donde se empieza a dibujar el contenedor
+   * */
+    private Point puntoInicio;
+  /**
+   * Punto donde termina de dibujarse el contenedor 
+   * */
+    private Point puntoFinal;
+  /**
+   * Valor para identificar a la presion como variable modificada
+   * */
+    public final static int PRESION = 0;
+  /**
+   * Valor para identificar al volumen como variable modificada
+   * */
+    public final static int VOLUMEN = 1;
+  /**
+   * Valor para identificar a la temperatura como variable modificada 
+   * */
+    public final static int TEMPERATURA = 2;
+  /**
+   * La altura maxima que puede alcanzar el piston
+   * */
     private double alturaMaxima=50;
+  /**
+   * El radio que ocupa el contenedor del piston
+   * */
     private final int RADIO_PISTON=20;
+  /**
+   * La altura actual del piston
+   * */
     private double altura;
+  /**
+   * Escala de pixeles
+   * */
     private int escalaPixeles;
-
+    /**
+     * Panel sobre el que se va a dibujar la representacion grafica del sistema
+     * */
     private VentanaDibujo panel;
     /*******************************************************************************/
+    /**
+     * Constructor del gas
+     * @param v Volumen del gas
+     * @param p Presion del gas
+     * @param T Temperatura del as
+     * @param a constante de interaccion molecular dada por el gas particular
+     * @param b Volumen de las moleculas dado por el gas particular
+     * @param pi Punto inicial donde se empieza a dibujar el contenedor
+     * @param pf Punto final donde se termina de dibujar el contenedor
+     * @param panel Panel donde se dibuja la representacion grafica
+     * @param VMX Volumen maximo que puede alcanzar el gas
+     * */
     public Gas(double v, double p, double T,double a, double b,Point pi,Point pf, VentanaDibujo panel,double VMX)
     {
         this.panel = panel;
@@ -42,10 +108,9 @@ public class Gas extends Thread implements GUI.Figura
         escalaPixeles=(int)((puntoFinal.getY()-puntoInicio.getY())/alturaMaxima);
         V_MAX=VMX;
     }
-    /*
-     * aproximarVolumen() utiliza el metodo de Newton-Raphson para obtener
-     *  un valor aproximado del volumen.
-     */
+  /**
+   *Metodo para aproximar el volumen numericamente por el metodo de Newton-Raphson
+   * */
     private double aproximarVolumen()
     {
         double valor=V_MAX;
@@ -56,10 +121,9 @@ public class Gas extends Thread implements GUI.Figura
         }
         return valor;
     }
-    /*
-     * cambiarColor() crea un nuevo color en base a la temperatura, para que al pintar el gas
-     * se tenga una mejor representación de la misma.
-     */
+  /**
+   * Metodo que cambia el color del gas en base a la temperatura para una representacion visual
+   * */
     private GradientPaint cambiarColor()
     {
         if(temperatura<=260)
@@ -87,6 +151,12 @@ public class Gas extends Thread implements GUI.Figura
     /*
      * Obtiene los valores de cada una de las variables termodinamicas.
      */
+  /**
+   * Metodo que establece el valor de la presion, el volumen y la temperatura del gas
+   * @param p Nuevo valor de la presion del gas
+   * @param v Nuevo valor del volumen del gas
+   * @param T Nuevo valor de la temperatura del gas
+   * */
     public void setVariables(double p,double v,double T)
     {
         this.presion=p;
@@ -94,30 +164,35 @@ public class Gas extends Thread implements GUI.Figura
         this.temperatura=T;
         System.out.println("Valores actuales: "+p+", "+v+", "+T);
     }
-    /*
-     * retorna el valor de presion actual
+    /**
+     * Metodo que retorna el valor de la presion
+     * @return Retorna el valor de presion actual
      */
     public double getPresion()
     {
         return presion;
     }
-    /*
-     * retorna el valor de temperatura actual
+    /**
+     * Metodo que retorna la temperatura
+     * @return Temperatura actual del gas
      */
     public double getTemperatura()
     {
         return temperatura;
     }
-    /*
-     * retorna el valor del volumen actual
+    /**
+     * Metodo que retorna el volumen 
+     * @return Volumen actual del gas
      */
     public double getVolumen()
     {
         return volumen;
     }
-    /*
+    /**
      * Calcula como se modifica la variable que no se modifico o fijo, en base
      * al tipo de proceso termodinamico que se realiza.
+     * @param tipoProceso El tipo de proceso que se realizo para llegar a ese estado
+     * @param variableModificada La variable que se modifico 
      */
     public void calcularVariables(String tipoProceso,int variableModificada)
     {
@@ -161,8 +236,9 @@ public class Gas extends Thread implements GUI.Figura
                 break;
          }
     }
-    /*
+    /**
      * Pinta el gas en VentanaDibujo
+     * @param g Componente grafico
      */
     public void pintar(Graphics g)
     {
@@ -171,7 +247,9 @@ public class Gas extends Thread implements GUI.Figura
         grafico.setPaint(this.cambiarColor());
         grafico.fillRect((int)puntoInicio.getX(), (int)(puntoFinal.getY()-altura), (int)(puntoFinal.getX()-puntoInicio.getX()), (int)altura);
     }
-
+    /**
+     * Cuando se inicializa el hilo se empieza a pintar constantemente
+     * */
     public void run(){
         while(true){
             panel.repaint();

@@ -1,6 +1,4 @@
-/*
- * JPanel en el cual se muestran las figuras dibujadas para la representacion grafica de la simulacion
- */
+
 package GUI;
 
 import java.awt.Dimension;
@@ -16,13 +14,20 @@ import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
 import SistemaTermodinamico.Colision;
 
+/**
+ * JPanel en el cual se muestran las figuras dibujadas para la representacion grafica de la simulacion
+ */
 public class VentanaDibujo extends JPanel
 {
+    /**El gas a dibujar*/
     private Gas gas;
+    /**El piston a dibujar*/
     private Piston piston;
+    /**Arreglo que contiene las moleculas a dibujar*/
     private Molecula moleculas[];
+    /**Objeto para calcular las colisiones*/
     private Colision colision;
-
+    /**Crea un panel VentanaDibujo*/
     public VentanaDibujo()
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
@@ -49,6 +54,10 @@ public class VentanaDibujo extends JPanel
     }
 
     @Override
+    /**
+     * Metodo para pintar en el panel 
+     * @param grafico Componente grafico
+     * */
     public void paintComponent(Graphics grafico)
     {
         super.paintComponent(grafico);
@@ -65,15 +74,25 @@ public class VentanaDibujo extends JPanel
          for(Molecula molecula: moleculas)
             molecula.pintar(g2);
     }
-
+    /**
+     * Retorna el gas a dibujar
+     * @return El gas a dibujar
+     * */
     public Gas getGas(){
         return this.gas;
     }
-
+    /**
+     * Retorna el piston a dibujar
+     *@return El piston a dibujar
+     *
+     * */
     public Piston getPiston(){
         return this.piston;
     }
-
+    /**
+     * Retorna el arreglo de moleculas a dibujar
+     *@return El arreglo de moleculas que se dibujan en el panel
+     * */
     public Molecula[] getMoleculas(){
         return this.moleculas;
     }

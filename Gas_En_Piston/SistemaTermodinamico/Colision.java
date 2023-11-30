@@ -3,22 +3,31 @@ package SistemaTermodinamico;
 
 import java.awt.geom.Point2D;
 
-/*
+/**
  * Clase destinada a verificar a colision entre moleculas y proceder a cambiar
  * el vector de velocidad.
  */
 
 public class Colision extends Thread{
-
+    /**
+     *
+     * */
     private final int X = 0;
     private final int Y = 1;
     private Molecula[] moleculas;
-
+    /**
+     *
+     *Crea un nuevo objeto de colision
+     * @param moleculas    Arreglo de moleculas cuyas colisiones se deben verificar
+     * */
     public Colision(Molecula[] moleculas){
         this.moleculas = moleculas;
     }
 
     @Override
+    /**
+     *Cuando se inicializa el hilo empieza a verificar las colisiones
+     * */
     public void run(){
         while(true){
             Colisiones();
@@ -26,8 +35,10 @@ public class Colision extends Thread{
         }
     }
     
-    // Se encarga de realizar la colision entre las moleculas para
-    // cada una de ellas.
+    /**
+     *Se encarga de realizar la colision entre las moleculas para
+     *cada una de ellas.
+     * */
     private void Colisiones(){        
         for(Molecula molecula1: moleculas){                       
             for(Molecula molecula2: moleculas){
@@ -38,7 +49,12 @@ public class Colision extends Thread{
         }
     }
 
-    // Predicado que nos dice si hay colision o no entre dos moleculas.
+    
+    /**
+     *Predicado que nos dice si hay colision o no entre dos moleculas.
+     *@param molecula1 molecula cuya colision se debe verificar con la molecula2
+     *@param molecula2 molecula cuya colision se debe verificar con la molecula1
+     * */
     private boolean verificarColision(Molecula molecula1, Molecula molecula2){
         Point2D.Double centro1 = molecula1.getPosicion();
         Point2D.Double centro2 = molecula2.getPosicion();
@@ -50,7 +66,11 @@ public class Colision extends Thread{
             return true;
         return false;
     }
-
+    /**
+     * Modifica la velocidad de las moleculas despues de la colision
+     * @param molecula1 molecula a la cual se le modifica la velocidad
+     * @param molecula2 molecula a la cual se le modifica la velocidad
+     * */
     private void modificarVelocidad(Molecula molecula1, Molecula molecula2){
         //velocidades finales después de los calculos.
         double v1_f[] = new double[2];
@@ -86,11 +106,18 @@ public class Colision extends Thread{
         molecula1.setVelocidad(v1_f[X], v1_f[Y]);
         molecula2.setVelocidad(v2_f[X], v2_f[Y]);
     }
-
+    /**
+     * Metodo que hace producto punto entre 2 vectores
+     * @param v1 vector de velocidad de la molecula1
+     * @param v2 vector de velocidad de la molecula2
+     * */
     private double productoPunto(double[] v1,  double [] v2){
         return (v1[X] * v2[X] + v1[Y] * v2[Y]);
     }
-
+    /**
+     * Eleva la norma del vector al cuadrado
+     * @param v vector al cual se le saca la norma  
+     * */
     private double normaAlCuadrado(double[] v){
         return (v[X] * v[X] + v[Y] * v[Y]);
     }
