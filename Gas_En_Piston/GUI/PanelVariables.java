@@ -9,11 +9,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Ciclos.Estado;
-import Ciclos.Lector;
-import SistemaTermodinamico.Gas;
-import SistemaTermodinamico.Piston;
-import SistemaTermodinamico.Molecula;
+import ciclos.Estado;
+import ciclos.Lector;
+import sistemaTermodinamico.Gas;
+import sistemaTermodinamico.Piston;
+import sistemaTermodinamico.Molecula;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -24,6 +24,7 @@ import java.io.IOException;
 /**
  * JPanel que muestra los valores de las variables termodinamicas, permite 
  * su modificacion y que se fijen. Muestra creditos en la esquina inferior derecha.
+ * @author Fausto Medina
  */
 public class PanelVariables extends JPanel{
 
@@ -109,7 +110,7 @@ public class PanelVariables extends JPanel{
    * Valor mínimo permitido para la temperatura en el estado.
    */
   private final double T_MIN = 135;
-  /*
+  /**
    * Lector de archivos utilizado para obtener los estado y procesos
    * de los ciclos
    */

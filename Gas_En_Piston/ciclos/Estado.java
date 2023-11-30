@@ -1,9 +1,10 @@
 
-package Ciclos;
+package ciclos;
 
 /**
  * Representa el estado en el que se encuentra el piston
  * y el tipo de proceso que se uso para llegar a el
+ * @author Alan Torres
  */
 public class Estado {
     private double temperatura;

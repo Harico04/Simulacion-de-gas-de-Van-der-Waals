@@ -1,6 +1,6 @@
 
 
-package SistemaTermodinamico;
+package sistemaTermodinamico;
 
 import GUI.VentanaDibujo;
 
@@ -11,6 +11,7 @@ import java.awt.Point;
 /**
  * Representa el piston en un sistema termodinamico cerrado con 
  * un gas. Se expande y contrae en funcion del volumen del sistema
+ * @author Alan Torres
  */
 public class Piston extends Thread implements GUI.Figura
 

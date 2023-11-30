@@ -1,11 +1,11 @@
-
-package SistemaTermodinamico;
+package sistemaTermodinamico;
 
 import java.awt.geom.Point2D;
-
+import sistemaTermodinamico.Molecula; 
 /**
  * Clase destinada a verificar a colision entre moleculas y proceder a cambiar
  * el vector de velocidad.
+ * @author Manuel Gortarez
  */
 
 public class Colision extends Thread{

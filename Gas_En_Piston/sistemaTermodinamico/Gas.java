@@ -1,5 +1,4 @@
-
-package SistemaTermodinamico;
+package sistemaTermodinamico;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -13,6 +12,7 @@ import GUI.VentanaDibujo;
  * Representa un gas contenido en un sistema termodinamico cerrado con un piston.
  * Se expande, contrae, enfria, calienta y varia su presion en base a la ecuacion
  * de Van Der Waals.
+ * @author Fausto Medina
  */
 public class Gas extends Thread implements GUI.Figura
 {
