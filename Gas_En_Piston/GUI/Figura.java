@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 /**
  * Contiene lo esencial para que se realice un dibujo en el panel de dibujo.
+ * @author Fausto Medina
  */
 public interface Figura
 {
