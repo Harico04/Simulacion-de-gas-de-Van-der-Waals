@@ -1,22 +1,15 @@
 /*
  * Ejecucion de la simulacion de gas
  * Elaborado por Fausto Medina, Manuel Gortarez y Alan Torres
- * A 27 de Noviembre de 2023
+ * A 29 de Noviembre de 2023
  */
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
-import javax.swing.Timer;
-
+import Escuchadores.EscuchadorVentana;
 import GUI.PanelVariables;
-import GUI.VentanaDibujo;
-import SistemaTermodinamico.Gas;
-import SistemaTermodinamico.Piston;       
+import GUI.VentanaDibujo;   
 
 public class Principal
 {
