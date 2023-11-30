@@ -23,15 +23,12 @@ public class EscuchadorVentana extends WindowAdapter {
 
     @Override
     public void windowClosing(WindowEvent e) {
-      
-       
-      
+      JOptionPane.showMessageDialog(null, "Gracias por usar nuestro programa");
+      JOptionPane.showMessageDialog(null,"\tAutores:\nManuel Eduardo Gortarez Blanco\nFausto Misael Medina Lugo\nAlan David Torres Flores");
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-      JOptionPane.showMessageDialog(null, "Gracias por usar nuestro programa");
-      JOptionPane.showMessageDialog(null,"\tAutores:\nManuel Eduardo Gortarez Blanco\nFausto Misael Medina Lugo\nAlan David Torres Flores");
     
   }
 
