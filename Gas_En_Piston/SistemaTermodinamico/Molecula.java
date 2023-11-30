@@ -1,13 +1,4 @@
-/*
- * Representa una molecula de un gas contenido en un piston. Se mueve en
- * funcion de la temperatura del gas y colisiona tanto con las paredes del
- * sistema como con otras moleculas.
- *
- * Además tratamos a la clase molecula como un hilo, es decir cada vez
- * que se cree una molécula y se ejecute esta funcionara en un hilo aparte.
- *
- * Autor: Manuel Eduardo Gortarez Blanco.
- */
+
 
 package SistemaTermodinamico;
 
@@ -19,20 +10,44 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+/** Representa una molecula de un gas contenido en un piston. Se mueve en
+ * funcion de la temperatura del gas y colisiona tanto con las paredes del
+ * sistema como con otras moleculas.
+ *
+ * Además tratamos a la clase molecula como un hilo, es decir cada vez
+ * que se cree una molécula y se ejecute esta funcionara en un hilo aparte.
+ *
+ * Autor: Manuel Eduardo Gortarez Blanco.
+ */
 public class Molecula extends Thread implements Figura {
 
-    // Tamaño de la molecula
+    
+    /**
+     * Tamaño de la molecula
+     * */
     private double radio;
 
-    // Temperatura del sistema
+    
+    /**
+     *Temperatura del sistema
+     * */
     private double temperatura = 273;
+    /**
+     * Valor auxiliar de la temperatura para su calculo
+     * */
     private double temperaturaaux;
 
     // Para normalizar el vector de velocidad
+    /**
+     * Variable usada para normalizar el vector de velocidad
+     * */
     private double escalarNormalizador;
 
     // Coordenadas de las paredes del contenedor.
-    private double paredes[];
+  /**
+   * Arreglo que contiene las coordenadas de las paredes del contenedor
+   * */  
+  private double paredes[];
 
     /*
      * Movemos a la molecula con los vectores de posición y
@@ -40,19 +55,50 @@ public class Molecula extends Thread implements Figura {
      * Por lo tanto la velocidad es constante y la posición
      * depende de a velocidad.
      */
+    /**
+     * Vector de posicion de la molecula
+     * */
     private double posicion[] = new double[2];
+    /**
+     * Vector de velocidad de la molecula
+     * */
     private double velocidad[] = new double[2];
+    /**
+     * Identificador de la componente X
+     * */
     private final int X = 0;
+  /**
+   * Identificador de la componente Y
+   * */
     private final int Y = 1;
+    /**
+     * Identificador de la pared de arriba 
+     * */
     private final int ARRIBA = 0;
+  /**
+   * Identificador de la pared derecha del contenedor
+   * */
     private final int DERECHA = 1;
+  /**
+   *Identificador de la pared de abajo del contenedor
+   * */
     private final int ABAJO = 2;
+  /**
+   * Identificador de la pared izquierda del contenedor
+   * */
     private final int IZQUIERDA = 3;
  
-    // Panel en donde pintamos las moléculas.
+    // Panel en donde pintamos las moléculas del contenedor
     private VentanaDibujo panel;
 
     // Constructor de la clase molecula
+   /**
+    *Constructor de la molecula
+    @param posicion El punto que indica la posicion de la molecula
+    @param radio El radio de la molecula
+    @param paredes Coordenadas de las paredes del contenedor
+    @param panel Panel donde se van a dibujar las moleculas
+    * */
     public Molecula(Point posicion, double radio, double[] paredes,VentanaDibujo panel) {
             
         this.panel = panel;
@@ -76,7 +122,7 @@ public class Molecula extends Thread implements Figura {
 
     // Esta funcion hace que se ejecute un nuevo hilo.
     @Override
-    public void run(){
+      public void run(){
         while(true){
             panel.repaint();
             actualizarVelocidad();
@@ -88,7 +134,7 @@ public class Molecula extends Thread implements Figura {
         }
     } 
     
-    /*
+    /**
      * Actualiza la velocidad en base al tiempo y
      * además verifica colisiones.
      */
@@ -135,8 +181,10 @@ public class Molecula extends Thread implements Figura {
 
     }
 
-    //Método para cambiar el color de las moléculas en cuestión de su temperatura
-    private Color cambiarColor(){
+    /**
+     * Método para cambiar el color de las moléculas en cuestión de su temperatura
+    * */
+  private Color cambiarColor(){
         if(temperatura<=260) return new Color(0,255,255,150);
         if(temperatura<=280) return new Color(0,255,255-(int)(7.75*(temperatura-260)),150);
         if(temperatura<=305) return new Color((int)(100+6.2*(temperatura-280)),255,0,150); 
@@ -145,27 +193,48 @@ public class Molecula extends Thread implements Figura {
     }
     
     // getter para el vector de velocidad.
+    /**
+     * Retorna el vector de velocidad de la molecula
+     *@return Retorna el vector de velocidad actual de la molecula
+     * */
     public double[] getVelocidad(){
         return this.velocidad;
     }
 
     // setter para el vector de velocidad.
+    /**
+     * Establece los valores del vector de velocidad
+     * @param Vx Componente en X del vector de velocidad
+     * @param Vy Componente en Y del vector de velocidad
+     * */
     public void setVelocidad(double Vx, double Vy){
         this.velocidad[X] = Vx;
         this.velocidad[Y] = Vy;
     }
 
     // getter para el radio
+    /**
+     * Retorna el radio de la molecula
+     * @return El radio de la molecula
+     * */
     public double getRadio(){
         return this.radio;
     }
 
     // getter para la posición
+    /**
+     * Retorna la posicion de la molecula 
+     *@return La posicion en X y Y de la molecula
+     * */
     public Point2D.Double getPosicion(){
         return new Point2D.Double(posicion[X], posicion[Y]);
     }
 
     // setter para la temperatura.
+    /**
+     * Establece una nueva temperatura para la molecula
+     * @param temperatura Nueva temperatura de la molecula
+     * */
     public void setTemperatura(double temperatura){
         this.temperatura = temperatura;
     }

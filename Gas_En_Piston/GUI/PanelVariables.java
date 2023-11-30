@@ -1,7 +1,4 @@
-/*
- * JPanel que muestra los valores de las variables termodinamicas, permite 
- * su modificacion y que se fijen. Muestra creditos en la esquina inferior derecha.
- */
+
 
 package GUI;
 
@@ -18,37 +15,122 @@ import SistemaTermodinamico.Gas;
 import SistemaTermodinamico.Piston;
 import SistemaTermodinamico.Molecula;
 
-import java.awt.Container;
+import java.awt.Color;
 import java.awt.GridLayout;
-import java.util.List;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 
+/**
+ * JPanel que muestra los valores de las variables termodinamicas, permite 
+ * su modificacion y que se fijen. Muestra creditos en la esquina inferior derecha.
+ */
 public class PanelVariables extends JPanel{
 
     // Declaracion de variables.
+    /**
+     * Arrelo que contiene las variables a imprimir
+     * */
     private JLabel impresionVariables[];
+  /**
+   * Arreglo que contiene las variables a modificar
+   * */
     private JSlider variables[];
+  /**
+   * Arreglo que contiene los procesos que se pueden dar en el piston
+   * */
     private String procesos[] = { "Isotermico", "Isobarico", "Isometrico" },ciclos[]={"------","Ericsson","Stirling"};
+    /**
+     * Lista que despliega los procesos 
+     * */
     private JComboBox<String> listaDeProcesos;
+  /**
+   * Lista que despliega los ciclos disponibles que se pueden ejecutar
+   * */
     private JComboBox<String> listadoCiclos;
+  /**
+   * Temperatura del gas
+   * */
     private double temperatura;
+  /**
+   * Presion del gas
+   * */
     private double presion;
+  /**
+   * Volumen del gas
+   * */
     private double volumen;
+  /**
+   * Gas del sistema termodinamico
+   * */
     private Gas gas;
+  /**
+   * Piston que representa las paredes del sistema
+   * */
     private Piston piston;
+  /**
+   *Escuchador para la presion 
+   * */
     EscuchadorPresion escPresion;
+  /**
+   *Escuchador de la temperatura
+   * */
     EscuchadorTemperatura escTemperatura;
+  /**
+   *Escuchador del volumen
+   * */
     EscuchadorVolumen escVolumen;
-    private final double P_MAX=5,V_MAX=50,T_MAX=600;
-    private final double P_MIN=1,V_MIN=2,T_MIN=135;
-    private VentanaDibujo lienzo;
+  /**
+   * Valor máximo permitido para la presión en el estado, 
+   */
+  private final double P_MAX = 5;
+
+  /**
+   * Valor máximo permitido para el volumen en el estado, 
+   */
+  private final double V_MAX = 50;
+
+  /**
+   * Valor máximo permitido para la temperatura en el estado.
+   */
+  private final double T_MAX = 600;
+
+  /**
+   * Valor mínimo permitido para la presión en el estado, 
+   */
+  private final double P_MIN = 1;
+
+  /**
+   * Valor mínimo permitido para el volumen en el estado, 
+   */
+  private final double V_MIN = 2;
+
+  /**
+   * Valor mínimo permitido para la temperatura en el estado.
+   */
+  private final double T_MIN = 135;
+  /*
+   * Lector de archivos utilizado para obtener los estado y procesos
+   * de los ciclos
+   */
     private Lector lector;
+  /**
+   * Lector que lee el archivo y almacena sus valores para generar ciclos
+    private Lector lector;
+  /**
+   * Manejador de ciclos del sistema
+   * */
     private ManejadorCiclos manCiclos;
 
+    /**
+     * Arreglo de moleculas 
+     * */
     private Molecula[] moleculas;
     // Constructor del panel de variables.
+    /**
+     * Constructor del panel de variables
+     * @param ventanaDibujo Panel sobre el cual se va a dibujar la representacion grafica del sistema
+     * */
     public PanelVariables(VentanaDibujo ventanaDibujo){
 
                 
@@ -77,71 +159,174 @@ public class PanelVariables extends JPanel{
         add(new JLabel("Fausto Misael Medina Lugo"));
         add(new JLabel("Alan David Torres Flores"));
     }
+    //Escuchador para el JSlider de presion
     class EscuchadorPresion implements ChangeListener
     {
         public void stateChanged(ChangeEvent e)
         {
-            double auxPresion=presion;
-             presion = variables[Constantes.PRESION].getValue()/100.0f;
-                    impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
-                    gas.setVariables(presion, volumen, temperatura);
-                    gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.PRESION);
-                    if(gas.getVolumen()>V_MAX||gas.getVolumen()<V_MIN||gas.getTemperatura()>T_MAX||gas.getTemperatura()<T_MIN)
-                    {
-                        variables[Constantes.PRESION].setValue((int)(auxPresion*100));
-                        gas.setVariables(presion, volumen, temperatura);
-                        return;
-                    }
-                    if(listaDeProcesos.getSelectedItem().toString()=="Isometrico")
-                    {
-                        variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
-                        temperatura=gas.getTemperatura();
-                        variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
-                        impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
-                        variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
-                        for(Molecula molecula: moleculas)
-                            molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);
-                    } 
-                    else
-                    {
-                        variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
-                        volumen=gas.getVolumen();
-                        variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
-                        impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
-                        piston.setVolumen(volumen,20);
-                        variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
-                    } 
+            presion = variables[Constantes.PRESION].getValue()/100.0f;
+            impresionVariables[Constantes.PRESION].setForeground(Color.BLACK);
+            impresionVariables[Constantes.PRESION].setText("Valor: " + presion);
+            gas.setVariables(presion, volumen, temperatura);
+            gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.PRESION);
+            if(listaDeProcesos.getSelectedItem().toString()=="Isometrico")
+            {
+                //Verificamos que la temperatura no se haya salido de los limites
+                if(gas.getTemperatura()>T_MAX)
+                {
+                    gas.setVariables(presion, volumen, T_MAX);
+                    gas.calcularVariables("Isometrico", Gas.TEMPERATURA);
+                    presion=gas.getPresion();
+                    variables[Constantes.PRESION].removeChangeListener(escPresion);
+                    variables[Constantes.PRESION].setValue((int)(presion*100));
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                    impresionVariables[Constantes.TEMPERATURA].setForeground(Color.red);
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+T_MAX);
+                    variables[Constantes.PRESION].addChangeListener(escPresion);
+                    return;
+                }
+                if(gas.getTemperatura()<T_MIN)
+                {
+                    gas.setVariables(presion, volumen, T_MIN);
+                    gas.calcularVariables("Isometrico", Gas.TEMPERATURA);
+                    presion=gas.getPresion();
+                    variables[Constantes.PRESION].removeChangeListener(escPresion);
+                    variables[Constantes.PRESION].setValue((int)(presion*100));
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                    impresionVariables[Constantes.TEMPERATURA].setForeground(Color.red);
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+T_MIN);
+                    variables[Constantes.PRESION].addChangeListener(escPresion);
+                    return;
+                }
+                //Actualizamos la temperatura si se encontraba dentro de los limites
+                variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                temperatura=gas.getTemperatura();
+                variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                impresionVariables[Constantes.TEMPERATURA].setForeground(Color.BLACK);
+                impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                for(Molecula molecula: moleculas)
+                    molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);
+            } 
+            else
+            {
+                //Verificamos que el volumen no se haya salido de los limites
+                if(gas.getVolumen()>V_MAX)
+                {
+                    gas.setVariables(presion, V_MAX, temperatura);
+                    gas.calcularVariables("Isotermico", Gas.VOLUMEN);
+                    presion=gas.getPresion();
+                    variables[Constantes.PRESION].removeChangeListener(escPresion);
+                    variables[Constantes.PRESION].setValue((int)(presion*100));
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                    impresionVariables[Constantes.VOLUMEN].setForeground(Color.red);
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+V_MAX);
+                    variables[Constantes.PRESION].addChangeListener(escPresion);
+                    return;
+                }
+                if(gas.getVolumen()<V_MIN)
+                {
+                    gas.setVariables(presion, V_MIN, temperatura);
+                    gas.calcularVariables("Isotermico", Gas.VOLUMEN);
+                    presion=gas.getPresion();
+                    variables[Constantes.PRESION].removeChangeListener(escPresion);
+                    variables[Constantes.PRESION].setValue((int)(presion*100));
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
+                    impresionVariables[Constantes.VOLUMEN].setForeground(Color.red);
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+V_MIN);
+                    variables[Constantes.PRESION].addChangeListener(escPresion);
+                    return;
+                }
+                //Actualizamos el volumen si se encontraba dentro del rango
+                variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                volumen=gas.getVolumen();
+                variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
+                impresionVariables[Constantes.VOLUMEN].setForeground(Color.BLACK);
+                impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                piston.setVolumen(volumen,20);
+                variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+            } 
         }
     }
+    //Escuchador para el JSLider de temperatura
     class EscuchadorTemperatura implements ChangeListener
     {
         public void stateChanged(ChangeEvent e)
         {
-            double auxTemperatura=temperatura;
             temperatura = variables[Constantes.TEMPERATURA].getValue()/100.0f;
+            impresionVariables[Constantes.TEMPERATURA].setForeground(Color.BLACK);
             impresionVariables[Constantes.TEMPERATURA].setText("Valor: " + temperatura);
             gas.setVariables(presion, volumen, temperatura);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.TEMPERATURA);
-            if(gas.getVolumen()>V_MAX||gas.getVolumen()<V_MIN||gas.getPresion()>P_MAX||gas.getPresion()<P_MIN)
-            {
-                variables[Constantes.TEMPERATURA].setValue((int)(auxTemperatura*100));
-                gas.setVariables(presion, volumen, temperatura);
-                return;
-            }
             if(listaDeProcesos.getSelectedItem().toString()=="Isobarico")
             { 
+                //Verificamos que el volumen no se haya salido de los limites establecidos
+                if(gas.getVolumen()>V_MAX)
+                {
+                    gas.setVariables(presion, V_MAX, temperatura);
+                    gas.calcularVariables("Isobarico", Gas.VOLUMEN);
+                    temperatura=gas.getTemperatura();
+                    variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                    variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                    impresionVariables[Constantes.VOLUMEN].setForeground(Color.red);
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+V_MAX);
+                    variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                    return;
+                }
+                if(gas.getVolumen()<V_MIN)
+                {
+                    gas.setVariables(presion, V_MIN, temperatura);
+                    gas.calcularVariables("Isobarico", Gas.VOLUMEN);
+                    temperatura=gas.getTemperatura();
+                    variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                    variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                    impresionVariables[Constantes.VOLUMEN].setForeground(Color.red);
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+V_MIN);
+                    variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                    return;
+                }
                 variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
                 volumen=gas.getVolumen();
                 variables[Constantes.VOLUMEN].setValue((int)(volumen*100.0));
+                impresionVariables[Constantes.VOLUMEN].setForeground(Color.BLACK);
                 impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
                 piston.setVolumen(volumen,20);
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
             }
             else
             {
+                if(gas.getPresion()>P_MAX)
+                {
+                    gas.setVariables(P_MAX, volumen, temperatura);
+                    gas.calcularVariables("Isometrico", Gas.PRESION);
+                    temperatura=gas.getTemperatura();
+                    variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                    variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                    impresionVariables[Constantes.PRESION].setForeground(Color.red);
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+P_MAX);
+                    variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                    return;
+                }
+                if(gas.getPresion()<P_MIN)
+                {
+                    gas.setVariables(P_MIN, volumen, temperatura);
+                    gas.calcularVariables("Isometrico", Gas.PRESION);
+                    temperatura=gas.getTemperatura();
+                    variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
+                    variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
+                    impresionVariables[Constantes.PRESION].setForeground(Color.red);
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+P_MIN);
+                    variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
+                    return;
+                }
                 variables[Constantes.PRESION].removeChangeListener(escPresion);
                 presion=gas.getPresion();
                 variables[Constantes.PRESION].setValue((int)(presion*100.0));
+                impresionVariables[Constantes.PRESION].setForeground(Color.BLACK);
                 impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
                 variables[Constantes.PRESION].addChangeListener(escPresion);
             }
@@ -150,36 +335,93 @@ public class PanelVariables extends JPanel{
                 molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);                
         }
     }
+    //Escuchador para el JSlider de volumen
     class EscuchadorVolumen implements ChangeListener
     {
 
         public void stateChanged(ChangeEvent e)
         {
-            double auxVolumen=volumen;
             volumen = variables[Constantes.VOLUMEN].getValue()/100.0f;
+            impresionVariables[Constantes.VOLUMEN].setForeground(Color.BLACK);
             impresionVariables[Constantes.VOLUMEN].setText("Valor: " + volumen);
             gas.setVariables(presion, volumen, temperatura);
             piston.setVolumen(volumen,20);
             gas.calcularVariables(listaDeProcesos.getSelectedItem().toString(),Gas.VOLUMEN);
-            if(gas.getTemperatura()>T_MAX||gas.getTemperatura()<T_MIN||gas.getPresion()>P_MAX||gas.getPresion()<P_MIN)
-            {
-                variables[Constantes.VOLUMEN].setValue((int)(auxVolumen*100));
-                gas.setVariables(presion, volumen, temperatura);
-                return;
-            }
             if(listaDeProcesos.getSelectedItem().toString()=="Isotermico")
             {
+                //Verificamos que la presion no se saliera de los limites
+                if(gas.getPresion()>P_MAX)
+                {
+                    gas.setVariables(P_MAX, volumen, temperatura);
+                    gas.calcularVariables("Isotermico", Gas.PRESION);
+                    volumen=gas.getVolumen();
+                    variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                    variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                    impresionVariables[Constantes.PRESION].setForeground(Color.red);
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+P_MAX);
+                    piston.setVolumen(volumen,20);
+                    variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                    return;
+                }
+                if(gas.getPresion()<P_MIN)
+                {
+                    gas.setVariables(P_MIN, volumen, temperatura);
+                    gas.calcularVariables("Isotermico", Gas.PRESION);
+                    volumen=gas.getVolumen();
+                    variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                    variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                    impresionVariables[Constantes.PRESION].setForeground(Color.red);
+                    impresionVariables[Constantes.PRESION].setText("Valor: "+P_MIN);
+                    piston.setVolumen(volumen,20);
+                    variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                    return;
+                }
+                //Actualizamos el valor de presion si se mantuvo dentro de los limites
                 variables[Constantes.PRESION].removeChangeListener(escPresion);
                 presion=gas.getPresion();
                 variables[Constantes.PRESION].setValue((int)(presion*100.0));
+                impresionVariables[Constantes.PRESION].setForeground(Color.BLACK);
                 impresionVariables[Constantes.PRESION].setText("Valor: "+presion);
                 variables[Constantes.PRESION].addChangeListener(escPresion);
             } 
             else
             {
+                //Verificamos que la temperatura no se haya salido de los limites
+                if(gas.getTemperatura()>T_MAX)
+                {
+                    gas.setVariables(presion, volumen, T_MAX);
+                    gas.calcularVariables("Isobarico", Gas.TEMPERATURA);
+                    volumen=gas.getVolumen();
+                    variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                    variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                    impresionVariables[Constantes.TEMPERATURA].setForeground(Color.red);
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+T_MAX);
+                    piston.setVolumen(volumen,20);
+                    variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                    return;
+                }
+                if(gas.getTemperatura()<T_MIN)
+                {
+                    gas.setVariables(presion, volumen, T_MIN);
+                    gas.calcularVariables("Isobarico", Gas.TEMPERATURA);
+                    volumen=gas.getVolumen();
+                    variables[Constantes.VOLUMEN].removeChangeListener(escVolumen);
+                    variables[Constantes.VOLUMEN].setValue((int)(volumen*100));
+                    impresionVariables[Constantes.VOLUMEN].setText("Valor: "+volumen);
+                    impresionVariables[Constantes.TEMPERATURA].setForeground(Color.red);
+                    impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+T_MIN);
+                    piston.setVolumen(volumen,20);
+                    variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
+                    return;
+                }
+                //Actualizamos el valor de temperatura si se mantuvo dentro de los limites
                 variables[Constantes.TEMPERATURA].removeChangeListener(escTemperatura);
                 temperatura=gas.getTemperatura();
                 variables[Constantes.TEMPERATURA].setValue((int)(temperatura*100));
+                impresionVariables[Constantes.TEMPERATURA].setForeground(Color.BLACK);
                 impresionVariables[Constantes.TEMPERATURA].setText("Valor: "+temperatura);
                 variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
                 for(Molecula molecula: moleculas)
@@ -188,6 +430,9 @@ public class PanelVariables extends JPanel{
         }
     }
     // Se inicializan las variables.
+     /**
+      *Metodo para inicializar variables
+      * */
     protected void inicializar(){
 
         impresionVariables = new JLabel[Constantes.CANTIDAD_VARIABLES];
@@ -292,35 +537,63 @@ public class PanelVariables extends JPanel{
     // 0 para proceso isotérmico
     // 1 para proceso isobárico
     // 2 para proceso isométrico
+    /**
+     * Metodo que determina cual proceso fue seleccionado
+     * 0 para Isotermico
+     * 1 para Isobarico
+     * 2 para Isometrico
+     * @return El tipo de proceso seleccionado
+     * */
     public int cualProceso(){
         return listaDeProcesos.getSelectedIndex();
     }
 
     // getters y setter de las variables del sistema.
+    /**
+     *Retorna el valor de la temperatura mostrada en el panel
+     *@return Valor de la temperatura mostrada en el panel
+     * */
     public float getTemperaturaPanel() {
         return variables[Constantes.TEMPERATURA].getValue()/100.f; //volvemos a la escala normal.
     }
-    
+    /**
+     * Retorna el valor de la presion mostrada en el panel
+     * @return Presion mostrada en el panel
+     * */ 
     public float getPresionPanel() {
         return variables[Constantes.PRESION].getValue()/100.f;
     }
-    
+    /**
+     *Retorna el valor del volumen mostrado
+     *@return Volumen mostrado en el panel
+     * */ 
     public float getVolumenPanel() {
         return variables[Constantes.TEMPERATURA].getValue()/100.f;
     }
-
+    /**
+     *Establece un nuevo valor para la temperatura mostrada en el panel
+     *@param temperatura Nuevo valor de la temperatura
+     * */
     public void setTemperaturaPanel(int temperatura){
         variables[Constantes.TEMPERATURA].setValue(temperatura*100);
     }
-
+    /**
+     * Establece un nuevo valor para la presion mostrada en el panel
+     * @param presion Nuevo valor de la presion
+     * */
     public void setPresionPanel(int presion){
         variables[Constantes.PRESION].setValue(presion*100);
     }
-
+    /**
+     * Establece un nuevo valor de la temperatura mostrada en el panel
+     * @param volumen Nuevo valor del volumen
+     * */
     public void setVolumenPanel(int volumen){
         variables[Constantes.VOLUMEN].setValue(volumen*100);
     }
-
+/**
+ * Clase encargada de manejar los ciclos en el sistema termodinamico
+ * */
 class ManejadorCiclos extends Thread
 {
     public void run()
@@ -341,7 +614,7 @@ class ManejadorCiclos extends Thread
                 //Intentamos leer el archivo
                 try
                 {
-                    lector=new Lector("Gas_En_Piston\\Ciclos\\"+listadoCiclos.getSelectedItem().toString()+".txt");
+                    lector=new Lector("Gas_En_Piston/Ciclos/"+listadoCiclos.getSelectedItem().toString()+".txt");
                 }catch(IOException ioe)
                 {
                     System.out.println("Error al leer el archivo "+ioe);
@@ -357,31 +630,28 @@ class ManejadorCiclos extends Thread
                 variables[Constantes.PRESION].setValue((int)(100*estadoActual.getPresion()));
                 variables[Constantes.VOLUMEN].setValue((int)(100*estadoActual.getVolumen()));
                 variables[Constantes.TEMPERATURA].setValue((int)(100*estadoActual.getTemperatura()));
+                for(Molecula molecula: moleculas)
+                molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);
                 variables[Constantes.PRESION].addChangeListener(escPresion);
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
                 variables[Constantes.TEMPERATURA].addChangeListener(escTemperatura);
                 presion=estadoActual.getPresion();
                 volumen=estadoActual.getVolumen();
                 temperatura=estadoActual.getTemperatura();
-                System.out.println(""+variables[Constantes.PRESION].getValue()+variables[Constantes.VOLUMEN].getValue()+variables[Constantes.TEMPERATURA].getValue());
                 boolean cicloActivo=true;
                 while(cicloActivo)
                 {
                     estadoAnterior=estadoActual;
                     iEstado=++iEstado%4;
-                    System.out.println(iEstado);
                     estadoActual=lector.getEstados().get(iEstado);
                     listaDeProcesos.setSelectedItem(estadoActual.getTipoDeProceso());
-                    System.out.println(listaDeProcesos.getSelectedItem());
-                    System.out.println(estadoActual.getVariableModificada());
                     switch(estadoActual.getVariableModificada())
                     {
                         case Gas.PRESION:
                             double cambioPresion=estadoActual.getPresion()-estadoAnterior.getPresion();
-                            for(int i=0;i<60;i++)
+                            for(int i=0;i<100;i++)
                             {
-                                variables[Constantes.PRESION].setValue((int)(variables[Constantes.PRESION].getValue()+cambioPresion*1.666666));
-                                System.out.println("Presion modificada: "+variables[Constantes.PRESION].getValue());
+                                variables[Constantes.PRESION].setValue((int)(variables[Constantes.PRESION].getValue()+Math.ceil(cambioPresion)));
                                 try
                                 {
                                     Thread.sleep(16);
@@ -390,15 +660,14 @@ class ManejadorCiclos extends Thread
                                     System.out.println("Error: "+ie);
                                 }
                             }
-                            
+                            variables[Constantes.PRESION].setValue((int)(estadoActual.getPresion()*100));
                         break;
 
                         case Gas.TEMPERATURA:
                             double cambioTemperatura= estadoActual.getTemperatura()-estadoAnterior.getTemperatura();
-                            for(int i=0;i<60;i++)
+                            for(int i=0;i<100;i++)
                             {
-                                variables[Constantes.TEMPERATURA].setValue((int)(variables[Constantes.TEMPERATURA].getValue()+cambioTemperatura*1.666666));
-                                System.out.println("Temperatura modificada: "+variables[Constantes.TEMPERATURA].getValue()); 
+                                variables[Constantes.TEMPERATURA].setValue((int)(variables[Constantes.TEMPERATURA].getValue()+Math.ceil(cambioTemperatura)));
                                 try
                                 {
                                     Thread.sleep(16);
@@ -407,14 +676,14 @@ class ManejadorCiclos extends Thread
                                     System.out.println("Error: "+ie);
                                 }
                             }
+                            variables[Constantes.TEMPERATURA].setValue((int)(estadoActual.getTemperatura()*100));
                         break;
 
                         case Gas.VOLUMEN:
                             double cambioVolumen=estadoActual.getVolumen()-estadoAnterior.getVolumen();
-                            for(int i=0;i<60;i++)
+                            for(int i=0;i<100;i++)
                             {
-                                variables[Constantes.VOLUMEN].setValue((int)(variables[Constantes.VOLUMEN].getValue()+cambioVolumen*1.666666));
-                                System.out.println("Volumen modificado: "+variables[Constantes.VOLUMEN].getValue());
+                                variables[Constantes.VOLUMEN].setValue((int)(variables[Constantes.VOLUMEN].getValue()+Math.ceil(cambioVolumen)));
                                 try
                                 {
                                     Thread.sleep(16);
@@ -423,6 +692,7 @@ class ManejadorCiclos extends Thread
                                     System.out.println("Error: "+ie);
                                 }
                             }
+                            variables[Constantes.VOLUMEN].setValue((int)(estadoActual.getVolumen()*100));
                             break;
                         }
                         if(listadoCiclos.getSelectedItem()=="------") cicloActivo=false;
@@ -433,6 +703,9 @@ class ManejadorCiclos extends Thread
     }
 }
 }
+/**
+ * Clase que contiene constantes para referenciar a ciertas variables
+ * */
 class Constantes{
     
     //Enumeraciones
