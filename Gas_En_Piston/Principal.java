@@ -15,7 +15,7 @@ public class Principal
 {
     public static void main(String[] args) {
         //Crea una nueva ventana
-        JFrame ven = new JFrame();
+        JFrame ven = new JFrame("Gas en piston");
         //Crea un nuevo panel sobre el que se va a pintar la representacion grafica del piston 
         VentanaDibujo ventanaDibujo = new VentanaDibujo();
     //Crea un nuevo JPanel sobre el que se muestran los valores de las variables y los sliders para modificar sus valores, adicionalmente muestra los creditos en la esquina inferior derecha
@@ -28,6 +28,8 @@ public class Principal
         ven.add(panelVariables, BorderLayout.EAST);
     //Establece el tamaño de la ventana
         ven.setSize(new Dimension(1000, 1000));
+    //Fijar el tamaño de la ventana
+        ven.setResizable(false);
     //Establece la localizacion de la ventana en el centro
         ven.setLocationRelativeTo(null);
     //Habilita el boton de cerrar la ventana 

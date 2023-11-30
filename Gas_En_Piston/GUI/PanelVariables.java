@@ -152,7 +152,7 @@ public class PanelVariables extends JPanel{
         add(new JLabel("--Volumen (L)--[1, 50]"));
         add(variables[Constantes.VOLUMEN]);
         add(impresionVariables[Constantes.VOLUMEN]);
-        add(new JLabel("CICLOS:"));
+        add(new JLabel("CICLOS: (Dejar vacio para quitar ciclo)"));
         add(listadoCiclos);
         add(new JLabel("Elaborado por:"));
         add(new JLabel("Manuel Eduardo Gortarez Blanco"));
