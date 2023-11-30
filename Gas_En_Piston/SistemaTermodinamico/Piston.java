@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 public class Piston extends Thread implements GUI.Figura
 
 {
@@ -22,7 +21,6 @@ public class Piston extends Thread implements GUI.Figura
   private int grosor;
   private int escalaPixeles;
   Point c1,c2,p1,p2;
-  private Rectangle piston,pA,pD,pI;
   private double[] coordenadas;
 
   public Piston(Point c1, Point c2,double volumen, VentanaDibujo panel,double radio){ 
@@ -30,10 +28,6 @@ public class Piston extends Thread implements GUI.Figura
     this.c2 = c2;
     this.volumen=volumen;
     this.radio = radio;
-     piston = new Rectangle ((int)c1.getX(), (int) altura_piston, (int)(c2.getX()-c1.getX()), (int) (altura_piston-20));
-     pI = new Rectangle ((int) c1.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
-     pD = new Rectangle ((int) c2.getX(),(int) c1.getY(), 1, (int) (c2.getY() - c1.getY()));
-     pA = new Rectangle((int) c1.getX(), (int)c2.getY(),(int)(c2.getX()-c1.getX()) , 1);
      escalaPixeles=(int)(c2.getY()-c1.getY())/50;
      altura_piston = escalaPixeles*(1000*this.volumen)/((Math.PI)*(Math.pow(this.radio, 2)));
      coordenadas= new double[4];
