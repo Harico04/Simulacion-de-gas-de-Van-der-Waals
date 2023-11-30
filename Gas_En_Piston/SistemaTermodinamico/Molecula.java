@@ -127,7 +127,7 @@ public class Molecula extends Thread implements Figura {
             panel.repaint();
             actualizarVelocidad();
             try{
-                sleep(16); // Simulamos 60 fps -> (1000 / 60)
+                sleep(18 - (int)((temperatura-35)/(600 - 35)*(14 - 0))); // Escalonamos la temperatura del [0-14]
             }catch(InterruptedException ie){
                 System.out.println("Error:" + ie);
             }
@@ -140,18 +140,7 @@ public class Molecula extends Thread implements Figura {
      */
     public void actualizarVelocidad(){
 
-        temperaturaaux = temperatura / 100.00; // [.35 - 60]
-        
-        // Normalizando el vector de velocidad
-        escalarNormalizador = Math.sqrt(Math.pow(velocidad[X], 2.0) + Math.pow(velocidad[Y], 2.0));
 
-        velocidad[X] /= escalarNormalizador;
-        velocidad[Y] /= escalarNormalizador;
-
-        // Ajustamos la magnitud del vector de velocidad en funcion de temperatura.
-        velocidad[X] *= temperaturaaux;
-        velocidad[Y] *= temperaturaaux;        
-        
         // Verificacion de colisiones con las paredes.
         if((paredes[ARRIBA] > posicion[Y] - radio)){            
             if(velocidad[Y] == 0) velocidad[Y] = 100;

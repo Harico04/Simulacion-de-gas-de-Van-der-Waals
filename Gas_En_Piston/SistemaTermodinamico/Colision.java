@@ -25,26 +25,15 @@ public class Colision extends Thread{
     }
 
     @Override
-    /**
-     *Cuando se inicializa el hilo empieza a verificar las colisiones
-     * */
-    public void run(){
-        while(true){
-            Colisiones();
- 
-        }
-    }
-    
-    /**
-     *Se encarga de realizar la colision entre las moleculas para
-     *cada una de ellas.
-     * */
-    private void Colisiones(){        
-        for(Molecula molecula1: moleculas){                       
-            for(Molecula molecula2: moleculas){
-                if(molecula1 == molecula2)
-                    continue;
-                if (verificarColision(molecula1, molecula2)) modificarVelocidad(molecula1, molecula2);
+    public void run() {
+        while (true) {
+            for (Molecula molecula1 : moleculas) {
+                for (Molecula molecula2 : moleculas) {
+                    if (molecula1 == molecula2)
+                        continue;
+                    if (verificarColision(molecula1, molecula2))
+                        modificarVelocidad(molecula1, molecula2);
+                }
             }
         }
     }
@@ -79,14 +68,14 @@ public class Colision extends Thread{
         // Obtenemos vectores de posicion y velocidad de la molecula1.
         double v1[] = molecula1.getVelocidad();
         double c1[] = new double[2];
-        c1[X] = molecula1.getPosicion().x;
-        c1[Y] = molecula1.getPosicion().y;
+        c1[X] = molecula1.getPosicion().getX();
+        c1[Y] = molecula1.getPosicion().getY();
         
         // Obtenemos vectores de posicion y velocidad de la molecula2.
         double v2[] = molecula2.getVelocidad();
         double c2[] = new double[2];
-        c2[X] = molecula2.getPosicion().x;
-        c2[Y] = molecula2.getPosicion().y;
+        c2[X] = molecula2.getPosicion().getX();
+        c2[Y] = molecula2.getPosicion().getY();
 
         //guardamos calculos en variables para simplificar el codigo.
         double deltaC_1[] = { c1[X] - c2[X], c1[Y] - c2[Y] }; // C1 -C2
@@ -99,7 +88,7 @@ public class Colision extends Thread{
         v1_f[Y] = v1[Y] - (productoPunto(deltaV_1, deltaC_1) / normaAlCuadrado(deltaC_1)) * deltaC_1[Y];
 
         // Calculamos v_2f
-          v2_f[X] = v2[X] - (productoPunto(deltaV_2, deltaC_2) / normaAlCuadrado(deltaC_2)) * deltaC_2[X];
+        v2_f[X] = v2[X] - (productoPunto(deltaV_2, deltaC_2) / normaAlCuadrado(deltaC_2)) * deltaC_2[X];
         v2_f[Y] = v2[Y] - (productoPunto(deltaV_2, deltaC_2) / normaAlCuadrado(deltaC_2)) * deltaC_2[Y];
 
         // Asignamos las velocidades actualizadas a las moleculas

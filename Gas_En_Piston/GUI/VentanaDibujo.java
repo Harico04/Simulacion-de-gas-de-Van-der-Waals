@@ -32,9 +32,9 @@ public class VentanaDibujo extends JPanel
     {
         this.gas = new Gas(35.0,6.0,273,1.363,0.03219,new Point(50,100),new Point(700,750), this,50.0);
         this.piston= new Piston(new Point(50,100), new Point(700,750), 22.27, this,20);
-        moleculas = new Molecula[30];
+        moleculas = new Molecula[20];
         int indiceAux=0;
-        for(int i=0;i<6;i++)
+        for(int i=0;i<4;i++)
         {
             for(int j=0;j<5;j++)
             {
