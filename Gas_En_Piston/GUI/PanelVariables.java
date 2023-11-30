@@ -109,10 +109,11 @@ public class PanelVariables extends JPanel{
    * Valor mínimo permitido para la temperatura en el estado.
    */
   private final double T_MIN = 135;
-  /**
-   * Lienzo sobre el que se pinta la representacion grafica del sistema
-   * */
-    private VentanaDibujo lienzo;
+  /*
+   * Lector de archivos utilizado para obtener los estado y procesos
+   * de los ciclos
+   */
+    private Lector lector;
   /**
    * Lector que lee el archivo y almacena sus valores para generar ciclos
     private Lector lector;
@@ -157,7 +158,7 @@ public class PanelVariables extends JPanel{
         add(new JLabel("Manuel Eduardo Gortarez Blanco"));
         add(new JLabel("Fausto Misael Medina Lugo"));
         add(new JLabel("Alan David Torres Flores"));
-
+    }
     //Escuchador para el JSlider de presion
     class EscuchadorPresion implements ChangeListener
     {
@@ -246,7 +247,7 @@ public class PanelVariables extends JPanel{
                 variables[Constantes.VOLUMEN].addChangeListener(escVolumen);
             } 
         }
-
+    }
     //Escuchador para el JSLider de temperatura
     class EscuchadorTemperatura implements ChangeListener
     {
@@ -333,7 +334,7 @@ public class PanelVariables extends JPanel{
             for(Molecula molecula: moleculas)
                 molecula.setTemperatura(variables[Constantes.TEMPERATURA].getValue()/100.00);                
         }
-
+    }
     //Escuchador para el JSlider de volumen
     class EscuchadorVolumen implements ChangeListener
     {
