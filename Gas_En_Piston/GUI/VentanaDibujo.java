@@ -39,7 +39,7 @@ public class VentanaDibujo extends JPanel
         {
             for(int j=0;j<5;j++)
             {
-                moleculas[indiceAux]=new Molecula(new Point(250+30*j, 600+30*i), 10, piston.getParedes(), this);
+                moleculas[indiceAux]=new Molecula(new Point(150+100*j, 550+60*i), 10, piston.getParedes(), this);
                 indiceAux++;
             }
         }          
