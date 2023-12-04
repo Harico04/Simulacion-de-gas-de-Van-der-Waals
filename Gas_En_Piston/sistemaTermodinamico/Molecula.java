@@ -102,8 +102,9 @@ public class Molecula extends Thread implements Figura {
         this.panel = panel;
         this.posicion[X] = posicion.getX();
         this.posicion[Y] = posicion.getY();
-        this.velocidad[X] = 1;
-        this.velocidad[Y] = 1;
+        this.velocidad[X] = (Math.random()+0.4)+(-1.5*(int)(Math.random()*100)%2);
+        this.velocidad[Y] = (Math.random()+0.4)+(-1.5*(int)(Math.random()*100)%2);
+        System.out.println("<"+this.velocidad[X]+", "+this.velocidad[Y]+">");
         this.paredes = paredes;
         this.radio = radio;
     }
