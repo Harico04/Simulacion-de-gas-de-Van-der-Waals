@@ -1,6 +1,10 @@
 package sistemaTermodinamico;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.util.Timer;
+
 import sistemaTermodinamico.Molecula; 
 /**
  * Clase destinada a verificar a colision entre moleculas y proceder a cambiar
@@ -9,12 +13,12 @@ import sistemaTermodinamico.Molecula;
  */
 
 public class Colision extends Thread{
-    /**
-     *
-     * */
+
     private final int X = 0;
     private final int Y = 1;
+    private int tam;
     private Molecula[] moleculas;
+    private boolean colisiones[][];
     /**
      *
      *Crea un nuevo objeto de colision
@@ -22,22 +26,30 @@ public class Colision extends Thread{
      * */
     public Colision(Molecula[] moleculas){
         this.moleculas = moleculas;
+        tam = moleculas.length;
+        colisiones = new boolean[tam][tam];
+        for(int i = 0; i < tam; ++i){
+            for(int j = 0; j < tam; ++j)
+                colisiones[i][j] = false;                
+        }
     }
 
     @Override
     public void run() {
-        while (true) {
-            for (Molecula molecula1 : moleculas) {
-                for (Molecula molecula2 : moleculas) {
-                    if (molecula1 == molecula2)
-                        continue;
-                    if (verificarColision(molecula1, molecula2))
-                        modificarVelocidad(molecula1, molecula2);
+        while(true){
+            for (int i = 0; i < tam; ++i) {
+                for (int j = i + 1; j < tam; ++j) {
+                    if (verificarColision(moleculas[i], moleculas[j]) && colisiones[i][j] == false){
+                        modificarVelocidad(moleculas[i], moleculas[j]);
+                        colisiones[i][j] = true;
+                    }else{
+                        if(!verificarColision(moleculas[i], moleculas[j]))
+                           colisiones[i][j] = false;
+                    }                       
                 }
             }
-        }
+        }       
     }
-
     
     /**
      *Predicado que nos dice si hay colision o no entre dos moleculas.
@@ -51,10 +63,9 @@ public class Colision extends Thread{
         double radio2 = molecula2.getRadio();
         double deltax = centro1.x - centro2.x;
         double deltay = centro1.y - centro2.y;
-        if(Math.sqrt(Math.pow(deltax, 2) + Math.pow(deltay, 2)) <= (radio1 + radio2))
-            return true;
-        return false;
+        return (Math.pow(deltax, 2) + Math.pow(deltay, 2) <= Math.pow((radio1 + radio2), 2));     
     }
+    
     /**
      * Modifica la velocidad de las moleculas despues de la colision
      * @param molecula1 molecula a la cual se le modifica la velocidad
@@ -103,6 +114,7 @@ public class Colision extends Thread{
     private double productoPunto(double[] v1,  double [] v2){
         return (v1[X] * v2[X] + v1[Y] * v2[Y]);
     }
+    
     /**
      * Eleva la norma del vector al cuadrado
      * @param v vector al cual se le saca la norma  

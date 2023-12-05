@@ -18,78 +18,66 @@ import java.awt.geom.Point2D;
  * @author Manuel Gortarez
  */
 public class Molecula extends Thread implements Figura {
-
     
     /**
      * Tamaño de la molecula
      * */
     private double radio;
-
-    
+   
     /**
      *Temperatura del sistema
      * */
     private double temperatura = 273;
+
     /**
-     * Valor auxiliar de la temperatura para su calculo
-     * */
-    private double temperaturaaux;
+     * Arreglo que contiene las coordenadas de las paredes del contenedor
+     * */  
+    private double paredes[];
 
-    // Para normalizar el vector de velocidad
-    /**
-     * Variable usada para normalizar el vector de velocidad
-     * */
-    private double escalarNormalizador;
-
-    // Coordenadas de las paredes del contenedor.
-  /**
-   * Arreglo que contiene las coordenadas de las paredes del contenedor
-   * */  
-  private double paredes[];
-
-    /*
-     * Movemos a la molecula con los vectores de posición y
-     * velocidad, consideramos que no tiene aceleración.
-     * Por lo tanto la velocidad es constante y la posición
-     * depende de a velocidad.
-     */
     /**
      * Vector de posicion de la molecula
      * */
     private double posicion[] = new double[2];
+    
     /**
      * Vector de velocidad de la molecula
      * */
     private double velocidad[] = new double[2];
+    
     /**
      * Identificador de la componente X
-     * */
+     */
     private final int X = 0;
-  /**
-   * Identificador de la componente Y
-   * */
+    
+    /**
+     * Identificador de la componente Y
+     */
     private final int Y = 1;
     /**
      * Identificador de la pared de arriba 
      * */
     private final int ARRIBA = 0;
-  /**
-   * Identificador de la pared derecha del contenedor
-   * */
+    
+    /**
+     * Identificador de la pared derecha del contenedor
+     *
+     */
+    
     private final int DERECHA = 1;
-  /**
-   *Identificador de la pared de abajo del contenedor
-   * */
+    
+    /**
+     *Identificador de la pared de abajo del contenedor
+     */
     private final int ABAJO = 2;
-  /**
-   * Identificador de la pared izquierda del contenedor
-   * */
+    
+    /**
+     * Identificador de la pared izquierda del contenedor
+     */
     private final int IZQUIERDA = 3;
  
     // Panel en donde pintamos las moléculas del contenedor
     private VentanaDibujo panel;
 
-    // Constructor de la clase molecula
    /**
     *Constructor de la molecula
     @param posicion El punto que indica la posicion de la molecula
@@ -177,7 +165,6 @@ public class Molecula extends Thread implements Figura {
         // Actualizamos la posicion.
         posicion[X] += velocidad[X];
         posicion[Y] += velocidad[Y];
-
     }
 
     /**
@@ -228,7 +215,7 @@ public class Molecula extends Thread implements Figura {
     public Point2D.Double getPosicion(){
         return new Point2D.Double(posicion[X], posicion[Y]);
     }
-
+    
     // setter para la temperatura.
     /**
      * Establece una nueva temperatura para la molecula
