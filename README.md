@@ -15,6 +15,9 @@ Requieres Versión JDK > 20.
 Dentro de la carpeta en donde se encuentra su .jar ejecute con la terminal: 
 `java -jar GasVanDerWaals.jar`
 
+# Así se mira el programa.
+![Gas](https://github.com/Mgb64/Simulacion-del-gas-de-Van-der-Waals/blob/main/GasVanDerWaals.gif)
+
 ## Autores.
 - [Manuel Gortarez](https://github.com/Mgb64)
 - [Fausto Medina](https://github.com/Harico04)
